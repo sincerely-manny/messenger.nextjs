@@ -1,0 +1,31 @@
+{
+    "extends": [
+        "airbnb",
+        "airbnb-typescript",
+        "airbnb/hooks",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:react/jsx-runtime",
+        "plugin:@next/next/recommended"
+    ],
+
+    "parserOptions": {
+        "project": ["./tsconfig.json"]
+    },
+
+    "rules": {
+        "indent": "off",
+        "@typescript-eslint/indent": [
+            "error",
+            4
+        ],
+        "react/jsx-indent": ["error", 4],
+        "react/jsx-indent-props": ["error", 4],
+        "no-unused-vars": "off"
+        // "@typescript-eslint/no-unused-vars": ["off"]
+    },
+
+    "plugins": [
+        "editorconfig"
+    ]
+}
