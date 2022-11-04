@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint:es": "npx eslint ./app",
+    "lint:style": "npx stylelint ./**/*.scss",
+    "lint:style-fix": "npx stylelint ./**/*.scss --fix"
   },
   "dependencies": {
     "@types/node": "18.11.9",
@@ -31,6 +33,13 @@
     "eslint-plugin-react": "7.31.10",
     "eslint-plugin-react-hooks": "4.6.0",
     "jest": "29.2.2",
-    "jest-environment-jsdom": "29.2.2"
+    "jest-environment-jsdom": "29.2.2",
+    "postcss-scss": "^4.0.5",
+    "sass": "1.56.0",
+    "stylelint": "14.14.1",
+    "stylelint-config-clean-order": "2.0.0",
+    "stylelint-config-standard": "29.0.0",
+    "stylelint-order": "5.0.0",
+    "stylelint-scss": "4.3.0"
   }
 }
