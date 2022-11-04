@@ -1,0 +1,15 @@
+@keyframes gradient-glow {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    100% {
+        background-position: 10% 10%;
+    }
+}
+
+.gradient-glow {
+    animation: gradient-glow 1s infinite;
+    animation-timing-function: cubic-bezier(0.1, 0.7, 1);
+    animation-direction: alternate;
+}

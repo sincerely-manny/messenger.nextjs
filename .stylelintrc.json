@@ -11,7 +11,10 @@
         "function-no-unknown": [
             true,
             {
-                "ignoreFunctions": ["adjust-color"]
+                "ignoreFunctions": [
+                    "adjust-color",
+                    "mix"
+                ]
             }
         ],
         "at-rule-empty-line-before": [
@@ -24,7 +27,8 @@
                 ]
             }
         ],
-        "string-quotes": "single"
+        "string-quotes": "single",
+        "import-notation": "string"
     },
     "ignoreFiles": [
         "build/*",

@@ -1,1 +1,17 @@
-@import url('../scss/reset.scss');
+@import '../scss/reset.scss';
+@import '../scss/keyframes.scss';
+@import '../scss/fonts.scss';
+@import '../scss/variables.scss';
+
+html,
+body {
+    font-family: Ubuntu, sans-serif;
+    color: $white;
+}
+
+main {
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(110deg, $dark-blue 0%, mix($dark-blue, $pink, 45%) 35%, $pink 50%);
+    background-size: 200% 200%;
+}
