@@ -11,6 +11,10 @@ body {
     color: $white;
 }
 
+a {
+    color: inherit;
+}
+
 main {
     width: 100vw;
     height: 100vh;

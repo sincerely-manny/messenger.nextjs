@@ -1,5 +1,94 @@
 @import '../scss/variables.scss';
 
+.chat-header {
+    height: 65px;
+
+    .settings-icon {
+        display: inline-block;
+
+        margin: 0 0 0 20px;
+
+        line-height: 65px;
+
+        opacity: 0.3;
+
+        transition: opacity 0.3s;
+
+        svg {
+            vertical-align: middle;
+        }
+
+        &:hover,
+        &:active {
+            opacity: 1;
+        }
+    }
+
+    .search-form {
+        display: inline-block;
+        font-size: $p12;
+
+        input[type='text'] {
+            box-sizing: border-box;
+            width: 230px;
+            height: 25px;
+            margin: 0 0 0 191px;
+            padding: 0 28px 0 8px;
+
+            font-weight: 300;
+            color: $white40;
+
+            background-color: transparent;
+            border: 1px solid $white30;
+            border-radius: 10px;
+            outline: 0;
+
+            transition: color 0.3s, border 0.3s;
+
+            &::placeholder {
+                font-style: italic;
+                color: $white30;
+            }
+        }
+
+        .searchButton {
+            cursor: pointer;
+
+            width: 15px;
+            margin: 0 0 0 -25px;
+            padding: 0;
+
+            color: $white30;
+            vertical-align: middle;
+
+            background: transparent;
+            border: 0;
+            outline: 0;
+
+            transition: color 0.3s;
+        }
+
+        form {
+            &:hover,
+            &:active,
+            &:focus-within {
+                input[type='text'] {
+                    color: $white80;
+                    border: 1px solid $white80;
+                }
+
+                .searchButton {
+                    color: $white80;
+
+                    &:hover {
+                        color: $white;
+                    }
+                }
+            }
+        }
+    }
+}
+
 .chats-list {
     display: block;
     width: 500px;

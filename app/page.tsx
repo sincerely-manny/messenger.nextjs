@@ -1,6 +1,7 @@
 import Image from 'next/image';
-import { type } from 'os';
+import Link from 'next/link';
 import './page.scss';
+import { FiSettings, FiSearch } from 'react-icons/fi';
 
 type ChatListItemProps = {
     active?: boolean,
@@ -17,7 +18,7 @@ function ChatListItem(props: ChatListItemProps) {
                     height={92}
                     alt="av16"
                     quality={100}
-                    // placeholder="blur" // @TODO blurDataURL
+                    // placeholder="blur" // TODO: blurDataURL
                 />
             </div>
             <div className="chat-list-last-message">
@@ -45,10 +46,26 @@ ChatListItem.defaultProps = {
 
 export default function Home() {
     return (
-        <aside className="chats-list">
-            <ChatListItem />
-            <ChatListItem active />
-            <ChatListItem />
-        </aside>
+        <>
+            <header className="chat-header">
+                <Link href="/settings" className="settings-icon">
+                    <FiSettings strokeWidth="0.5" size="40px" />
+                </Link>
+                <div className="search-form">
+                    <form action="/search" method="get">
+                        <input type="text" name="query" id="chat-search" placeholder="Search..." />
+                        <button type="submit" className="searchButton">
+                            <FiSearch size="15px" />
+                        </button>
+                    </form>
+                </div>
+            </header>
+            <aside className="chats-list">
+                <ChatListItem />
+                <ChatListItem active />
+                <ChatListItem />
+            </aside>
+
+        </>
     );
 }
