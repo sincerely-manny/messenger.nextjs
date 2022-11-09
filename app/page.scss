@@ -1,22 +1,22 @@
 @import '../scss/variables.scss';
 
-.chat-header {
-    height: 65px;
+.messenger {
+    display: grid;
+    grid-template-columns: 500px 1fr;
+    grid-template-rows: 65px 1fr;
+}
+
+.chat-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+    padding: 0 4px 0 17px;
 
     .settings-icon {
-        display: inline-block;
-
-        margin: 0 0 0 20px;
-
-        line-height: 65px;
-
         opacity: 0.3;
-
         transition: opacity 0.3s;
-
-        svg {
-            vertical-align: middle;
-        }
 
         &:hover,
         &:active {
@@ -32,7 +32,7 @@
             box-sizing: border-box;
             width: 230px;
             height: 25px;
-            margin: 0 0 0 191px;
+            margin: 0;
             padding: 0 28px 0 8px;
 
             font-weight: 300;
@@ -54,8 +54,11 @@
         .searchButton {
             cursor: pointer;
 
+            position: relative;
+            left: -25px;
+
             width: 15px;
-            margin: 0 0 0 -25px;
+            margin: 0;
             padding: 0;
 
             color: $white30;
@@ -89,9 +92,49 @@
     }
 }
 
+.chat-window {
+    box-sizing: border-box;
+    padding: 0 20px;
+
+    .message-container {
+        display: grid;
+        grid-template-columns: 1fr 40px;
+        gap: 45px;
+
+        margin: 0 0 15px;
+
+        font-weight: 300;
+
+        .message-text {
+            display: inline-block;
+            justify-self: start;
+
+            box-sizing: border-box;
+            padding: 5px 12px;
+
+            background: linear-gradient(90deg, $grad-blue2 0%, $grad-blue1 100%);
+            border-radius: 20px;
+        }
+
+        time {
+            align-self: end;
+            width: 40px;
+            font-size: $p12;
+            color: $white80;
+        }
+
+        &.message-self {
+            .message-text {
+                justify-self: end;
+
+                background: linear-gradient(90deg, $grad-pink2 0%, $grad-pink1 100%);
+            }
+        }
+    }
+}
+
 .chats-list {
     display: block;
-    width: 500px;
 
     .chat-list-item {
         cursor: pointer;
