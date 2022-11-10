@@ -1,12 +1,10 @@
 @import '../scss/reset.scss';
 @import '../scss/keyframes.scss';
-@import '../scss/fonts.scss';
 @import '../scss/variables.scss';
 
 html,
 body {
-    font-family: Ubuntu, sans-serif;
-    font-size: 14px;
+    font-size: 15px;
     line-height: normal;
     color: $white;
 }

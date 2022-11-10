@@ -1,0 +1,70 @@
+@import '../../scss/variables.scss';
+
+.header-search-form {
+    display: inline-block;
+    font-size: $p12;
+
+    input[type='text'] {
+        box-sizing: border-box;
+        width: 230px;
+        height: 25px;
+        margin: 0;
+        padding: 0 28px 0 8px;
+
+        font-family: inherit;
+        font-weight: 200;
+        color: $white40;
+
+        background-color: transparent;
+        border: 1px solid $white30;
+        border-radius: 10px;
+        outline: 0;
+
+        transition: color 0.3s, border 0.3s;
+
+        &::placeholder {
+            font-family: inherit;
+            font-style: italic;
+            color: $white30;
+        }
+    }
+
+    .searchButton {
+        cursor: pointer;
+
+        position: relative;
+        left: -25px;
+
+        width: 15px;
+        margin: 0;
+        padding: 0;
+
+        color: $white30;
+        vertical-align: middle;
+
+        background: transparent;
+        border: 0;
+        outline: 0;
+
+        transition: color 0.3s;
+    }
+
+    form {
+        &:hover,
+        &:active,
+        &:focus-within {
+            input[type='text'] {
+                color: $white80;
+                border: 1px solid $white80;
+            }
+
+            .searchButton {
+                color: $white80;
+
+                &:hover {
+                    color: $white;
+                }
+            }
+        }
+    }
+}

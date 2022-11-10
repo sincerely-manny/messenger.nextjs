@@ -1,0 +1,36 @@
+@import '../../scss/variables.scss';
+
+.message-container {
+    display: grid;
+    grid-template-columns: 1fr 40px;
+    gap: 20px;
+
+    margin: 0 0 15px;
+
+    font-weight: 200;
+
+    .message-text {
+        display: inline-block;
+        justify-self: start;
+
+        box-sizing: border-box;
+        padding: 5px 12px;
+
+        background: linear-gradient(90deg, $grad-blue2 0%, $grad-blue1 100%);
+        border-radius: 20px;
+    }
+
+    time {
+        align-self: end;
+        width: 40px;
+        font-size: $p12;
+        color: $white80;
+    }
+
+    &.message-self {
+        .message-text {
+            justify-self: end;
+            background: linear-gradient(90deg, $grad-pink2 0%, $grad-pink1 100%);
+        }
+    }
+}

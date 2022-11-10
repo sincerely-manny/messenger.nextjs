@@ -1,0 +1,35 @@
+@import '../../scss/variables.scss';
+
+.messenger {
+    display: grid;
+    grid-template-columns: 500px 1fr;
+    grid-template-rows: 65px 1fr;
+}
+
+.chat-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+    padding: 0 4px 0 17px;
+
+    .settings-icon {
+        opacity: 0.3;
+        transition: opacity 0.3s;
+
+        &:hover,
+        &:active {
+            opacity: 1;
+        }
+    }
+}
+
+.chat-window {
+    box-sizing: border-box;
+    padding: 0 20px;
+}
+
+.chats-list {
+    display: block;
+}
