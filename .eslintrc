@@ -21,8 +21,11 @@
         ],
         "react/jsx-indent": ["error", 4],
         "react/jsx-indent-props": ["error", 4],
-        "no-unused-vars": "off"
-        // "@typescript-eslint/no-unused-vars": ["off"]
+        "no-unused-vars": "off",
+        "jsx-a11y/label-has-associated-control": [ 2, {
+            "controlComponents": ["Field"],
+            "depth": 3
+        }]
     },
 
     "plugins": [

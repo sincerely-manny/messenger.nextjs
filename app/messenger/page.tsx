@@ -5,7 +5,7 @@ import ChatMessage from '../../components/ChatMessage';
 import HeaderSearchForm from '../../components/HeaderSearchForm';
 import './page.scss';
 
-export default function Home() {
+export default function Messenger() {
     return (
         <main className="messenger">
             <header className="chat-list-header">

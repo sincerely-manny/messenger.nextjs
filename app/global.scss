@@ -13,6 +13,25 @@ a {
     color: inherit;
 }
 
+h1,
+h2,
+h3,
+h4 {
+    text-align: center;
+}
+
+h1 {
+    font-size: $p30;
+}
+
+h2 {
+    font-size: $p25;
+}
+
+h3 {
+    font-size: $p20;
+}
+
 main {
     width: 100vw;
     height: 100vh;
