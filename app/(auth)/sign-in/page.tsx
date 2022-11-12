@@ -1,10 +1,8 @@
 'use client';
 
-import {
-    Formik, Field, Form, ErrorMessage, FormikHelpers, FormikProps,
-} from 'formik';
 import Link from 'next/link';
 import * as Yup from 'yup';
+import { StyledForm, StyledFormTypes } from '../../../components/StyledForm';
 import fonts from '../../../scss/fonts';
 
 type SignInInputs = {
@@ -20,9 +18,9 @@ const SignInSchema = Yup.object().shape({
 });
 
 export default function SignIn() {
-    const submitHandler = (
-        values: SignInInputs,
-        actions: FormikHelpers<SignInInputs>,
+    const submitHandler: StyledFormTypes.Handler<SignInInputs> = (
+        values,
+        actions,
     ) => {
         console.log(values);
         actions.setSubmitting(false);
@@ -30,27 +28,16 @@ export default function SignIn() {
     return (
         <>
             <h1 className={`form-title ${fonts.lora.className}`}>Sign In</h1>
-            <Formik
+            <StyledForm<SignInInputs>
+                yupValidationSchema={SignInSchema}
                 initialValues={{ login: '', password: '' }}
-                validationSchema={SignInSchema}
                 onSubmit={submitHandler}
-            >
-                { ({ errors, touched }: FormikProps<SignInInputs>) => (
-                    <Form className="auth-form">
-                        <label htmlFor="login">
-                            Login
-                            <Field name="login" id="login" type="text" className={errors.login && touched.login ? 'invalid' : ''} />
-                            <ErrorMessage name="login" component="span" />
-                        </label>
-                        <label htmlFor="password">
-                            Password
-                            <Field name="password" id="password" type="password" className={errors.password && touched.password ? 'invalid' : ''} />
-                            <ErrorMessage name="password" component="span" />
-                        </label>
-                        <Field name="submit" type="submit" value="Sign In" disabled={(errors.login || errors.password)} />
-                    </Form>
-                )}
-            </Formik>
+                inputsList={[
+                    { type: 'text', name: 'login', label: 'Login' },
+                    { type: 'password', name: 'password', label: 'Password' },
+                    { type: 'submit', name: 'submit', label: 'Sign in' },
+                ]}
+            />
             <p className="diff-auth-option-link">
                 Don&apos;t have an account?&nbsp;
                 <Link href="/sign-up">
