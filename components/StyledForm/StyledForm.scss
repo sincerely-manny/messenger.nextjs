@@ -25,6 +25,12 @@ form.styled-form {
 
             transition: border 0.2s, background 0.2s;
 
+            &::placeholder {
+                font-family: inherit;
+                font-style: italic;
+                color: $white30;
+            }
+
             &:hover,
             &:focus,
             &:active {

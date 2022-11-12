@@ -14,7 +14,7 @@ export default function StyledForm<Values extends FormikValues>(props: StyledFor
             validationSchema={yupValidationSchema}
             onSubmit={onSubmit}
         >
-            { ({ errors, touched }) => (
+            { ({ errors, touched, isSubmitting }) => (
                 <Form className={`styled-form ${className || ''}`}>
                     {
                         inputsList.map((input) => {
@@ -40,7 +40,7 @@ export default function StyledForm<Values extends FormikValues>(props: StyledFor
                             }
                             const anyError = inputsList.some(({ name: n }) => errors[n]);
                             return (
-                                <Field name="submit" type="submit" value="Sign in" disabled={anyError} key={id} />
+                                <Field name={name} type="submit" value={label} disabled={anyError || isSubmitting} key={id} />
                             );
                         })
                     }
