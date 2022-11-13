@@ -1,12 +1,19 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { ApiResponse } from './types';
+import { ApiResponse } from './general';
 
-export default abstract class Rest<PayloadType = undefined> {
-    protected request?: NextApiRequest;
+interface NextApiRequestExtended<RequestBodyType> extends NextApiRequest {
+    body: RequestBodyType,
+}
 
-    protected response?: NextApiResponse<ApiResponse<PayloadType>>;
+export default abstract class Rest<RequestBodyType = undefined, PayloadType = undefined> {
+    protected request!: NextApiRequestExtended<RequestBodyType>;
 
-    public handler = (req: NextApiRequest, res: NextApiResponse<ApiResponse<PayloadType>>) => {
+    protected response!: NextApiResponse<ApiResponse<PayloadType>>;
+
+    public handler = (
+        req: NextApiRequestExtended<RequestBodyType>,
+        res: NextApiResponse<ApiResponse<PayloadType>>,
+    ) => {
         this.request = req;
         this.response = res;
         if (this.request.method === 'GET') {
