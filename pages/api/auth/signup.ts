@@ -1,7 +1,7 @@
 import { ValidationError } from 'yup';
-import { StatusCode } from '../../../api-types/general';
-import Rest from '../../../api-types/rest';
-import { SignUpInputs, SignUpSchema } from '../../../api-types/signup';
+import { StatusCode } from 'api-types/general';
+import Rest from 'api-types/rest';
+import { SignUpInputs, SignUpSchema } from 'api-types/signup';
 
 class SignUp extends Rest<SignUpInputs, unknown> {
     post = () => {

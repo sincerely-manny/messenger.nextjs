@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { FiSettings } from 'react-icons/fi';
-import ChatListItem from '../../components/ChatListItem';
-import ChatMessage from '../../components/ChatMessage';
-import HeaderSearchForm from '../../components/HeaderSearchForm';
+import ChatListItem from 'components/ChatListItem';
+import ChatMessage from 'components/ChatMessage';
+import HeaderSearchForm from 'components/HeaderSearchForm';
 import './page.scss';
 
 export default function Messenger() {

@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import * as Yup from 'yup';
-import { StyledForm, StyledFormTypes } from '../../../components/StyledForm';
-import fonts from '../../../scss/fonts';
+import { StyledForm, StyledFormTypes } from 'components/StyledForm';
+import fonts from 'scss/fonts';
 
 type SignInInputs = {
     login: string,

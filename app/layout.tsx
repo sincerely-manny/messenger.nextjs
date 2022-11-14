@@ -1,5 +1,5 @@
 import './global.scss';
-import fonts from '../scss/fonts';
+import fonts from 'scss/fonts';
 
 export default function RootLayout({ children }: {
     children: React.ReactNode;

@@ -2,10 +2,11 @@
 
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import Link from 'next/link';
-import { StyledForm, StyledFormTypes } from '../../../components/StyledForm';
-import { ApiResponse } from '../../../api-types/general';
-import { SignUpSchema, SignUpInputs } from '../../../api-types/signup';
-import fonts from '../../../scss/fonts';
+import { StyledForm, StyledFormTypes } from 'components/StyledForm';
+import { ApiResponse } from 'api-types/general';
+import { SignUpSchema, SignUpInputs } from 'api-types/signup';
+import fonts from 'scss/fonts';
+import PopUpNotification from 'components/PopUpNotification/PopUpNotification';
 
 export default function SignUp() {
     const submitHandler: StyledFormTypes.Handler<SignUpInputs> = (
@@ -47,6 +48,7 @@ export default function SignUp() {
                     Sign in
                 </Link>
             </p>
+            <PopUpNotification />
         </>
     );
 }
