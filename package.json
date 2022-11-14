@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint:es": "npx eslint ./app",
+    "lint:ts": "tsc --noEmit",
     "lint:style": "npx stylelint ./**/*.scss",
     "lint:style-fix": "npx stylelint ./**/*.scss --fix",
     "prisma:migrate": "npx prisma migrate dev --name init"
