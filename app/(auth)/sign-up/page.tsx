@@ -1,12 +1,12 @@
 'use client';
 
-import axios, { AxiosError, AxiosResponse } from 'axios';
-import Link from 'next/link';
-import { StyledForm, StyledFormTypes } from 'components/StyledForm';
 import { ApiResponse } from 'api-types/general';
-import { SignUpSchema, SignUpInputs } from 'api-types/signup';
-import fonts from 'scss/fonts';
+import { SignUpInputs, SignUpSchema } from 'api-types/signup';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import PopUpNotification from 'components/PopUpNotification/PopUpNotification';
+import { StyledForm, StyledFormTypes } from 'components/StyledForm';
+import Link from 'next/link';
+import fonts from 'scss/fonts';
 
 export default function SignUp() {
     const submitHandler: StyledFormTypes.Handler<SignUpInputs> = (

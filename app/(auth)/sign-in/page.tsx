@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
-import * as Yup from 'yup';
 import { StyledForm, StyledFormTypes } from 'components/StyledForm';
+import Link from 'next/link';
 import fonts from 'scss/fonts';
+import * as Yup from 'yup';
 
 type SignInInputs = {
     login: string,
