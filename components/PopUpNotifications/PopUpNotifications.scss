@@ -1,0 +1,53 @@
+@import 'scss/variables.scss';
+
+.notifications-viewport {
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+.pu-notification {
+    position: relative;
+
+    display: block;
+
+    box-sizing: border-box;
+    width: 200px;
+    margin: 10px;
+    padding: 5px;
+
+    border: 1px solid $white40;
+    border-radius: 10px;
+
+    .pu-notification-message {
+        font-weight: 200;
+    }
+
+    .pu-notification-close {
+        cursor: pointer;
+
+        position: absolute;
+        top: -10px;
+        right: -10px;
+
+        display: block;
+
+        height: 25px;
+        margin: 0;
+        padding: 0;
+
+        color: $white80;
+
+        background: transparent;
+        background: $white20;
+        border: 0;
+        border-radius: 25px;
+        outline: 0;
+
+        transition: background 0.2s;
+
+        &:hover {
+            background: $red60;
+        }
+    }
+}

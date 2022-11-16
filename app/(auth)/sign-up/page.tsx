@@ -3,21 +3,30 @@
 import { ApiResponse } from 'api-types/general';
 import { SignUpInputs, SignUpSchema } from 'api-types/signup';
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import PopUpNotification from 'components/PopUpNotification/PopUpNotification';
+import { addNotification } from 'components/PopUpNotifications/slice';
 import { StyledForm, StyledFormTypes } from 'components/StyledForm';
 import Link from 'next/link';
+import { useDispatch } from 'react-redux';
 import fonts from 'scss/fonts';
 
 export default function SignUp() {
+    const dispatch = useDispatch();
     const submitHandler: StyledFormTypes.Handler<SignUpInputs> = (
         values,
         actions,
     ) => {
         const res = axios.post<SignUpInputs, AxiosResponse<ApiResponse>>('/api/auth/signup', values);
         res.then((r) => {
-            console.log(r.data.payload);
+            dispatch(addNotification({
+                type: 'success',
+                message: r.data.payload || 'Undefined',
+                title: 'Sent:',
+            }));
         }).catch((e: AxiosError<ApiResponse>) => {
-            console.log(e.response?.data.message);
+            dispatch(addNotification({
+                type: 'error',
+                message: e.response?.data.message || 'Error sending data',
+            }));
         }).finally(() => {
             actions.setSubmitting(false);
         });
@@ -48,7 +57,6 @@ export default function SignUp() {
                     Sign in
                 </Link>
             </p>
-            <PopUpNotification />
         </>
     );
 }

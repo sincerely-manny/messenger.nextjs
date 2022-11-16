@@ -1,3 +1,7 @@
+'use client';
+
+import { Provider } from 'react-redux';
+import { store } from 'store';
 import './auth.scss';
 
 export default function AuthLayout({ children }: {
@@ -6,7 +10,9 @@ export default function AuthLayout({ children }: {
     return (
         <main className="auth-page">
             <section className="auth-window">
-                {children}
+                <Provider store={store}>
+                    {children}
+                </Provider>
             </section>
         </main>
     );

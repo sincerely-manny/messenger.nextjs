@@ -8,8 +8,8 @@
     "start": "next start",
     "lint:es": "npx eslint ./app",
     "lint:ts": "tsc --noEmit",
-    "lint:style": "npx stylelint ./**/*.scss",
-    "fix:style": "npx stylelint ./**/*.scss --fix",
+    "lint:style": "npx stylelint **/*.scss",
+    "fix:style": "npx stylelint **/*.scss --fix",
     "prisma:migrate": "npx prisma migrate dev --name init"
   },
   "dependencies": {

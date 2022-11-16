@@ -1,5 +1,6 @@
 import './global.scss';
 import fonts from 'scss/fonts';
+import PopUpNotificationsProvider from 'components/PopUpNotifications/PopUpNotificationsProvider';
 
 export default function RootLayout({ children }: {
     children: React.ReactNode;
@@ -11,6 +12,7 @@ export default function RootLayout({ children }: {
             </head>
             <body className={fonts.nunito.className}>
                 {children}
+                <PopUpNotificationsProvider />
             </body>
         </html>
     );
