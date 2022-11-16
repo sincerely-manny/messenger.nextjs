@@ -19,7 +19,7 @@ export default function SignUp() {
         res.then((r) => {
             dispatch(addNotification({
                 type: 'success',
-                message: r.data.payload || 'Undefined',
+                message: JSON.stringify(r.data.payload) || 'Undefined',
                 title: 'Sent:',
             }));
         }).catch((e: AxiosError<ApiResponse>) => {
