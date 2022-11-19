@@ -1,16 +1,13 @@
 'use client';
 
 import * as Toast from '@radix-ui/react-toast';
-import { Provider } from 'react-redux';
-import { store } from 'store';
+import withStoreProvider from 'components/withStoreProvider';
 import PopUpNotifications from './PopUpNotifications';
 
 const PopUpNotificationsProvider = () => (
-    <Provider store={store}>
-        <Toast.Provider>
-            <PopUpNotifications />
-        </Toast.Provider>
-    </Provider>
+    <Toast.Provider>
+        <PopUpNotifications />
+    </Toast.Provider>
 );
 
-export default PopUpNotificationsProvider;
+export default withStoreProvider(PopUpNotificationsProvider);

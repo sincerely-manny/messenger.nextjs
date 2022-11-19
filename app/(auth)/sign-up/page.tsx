@@ -5,6 +5,7 @@ import { SignUpInputs, SignUpSchema } from 'api-types/signup';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { addNotification } from 'components/PopUpNotifications/slice';
 import { StyledForm, StyledFormTypes } from 'components/StyledForm';
+import withStoreProvider from 'components/withStoreProvider';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import fonts from 'scss/fonts';
@@ -61,4 +62,4 @@ const SignUp = () => {
     );
 };
 
-export default SignUp;
+export default withStoreProvider(SignUp);
