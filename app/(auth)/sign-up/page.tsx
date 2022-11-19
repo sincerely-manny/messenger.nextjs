@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import fonts from 'scss/fonts';
 
-export default function SignUp() {
+const SignUp = () => {
     const dispatch = useDispatch();
     const submitHandler: StyledFormTypes.Handler<SignUpInputs> = (
         values,
@@ -59,4 +59,6 @@ export default function SignUp() {
             </p>
         </>
     );
-}
+};
+
+export default SignUp;
