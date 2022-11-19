@@ -2,6 +2,7 @@
 
 import { addNotification } from 'components/PopUpNotifications';
 import { StyledForm, StyledFormTypes } from 'components/StyledForm';
+import withStoreProvider from 'components/withStoreProvider';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import fonts from 'scss/fonts';
@@ -55,4 +56,4 @@ const SignIn = () => {
     );
 };
 
-export default SignIn;
+export default withStoreProvider(SignIn);
