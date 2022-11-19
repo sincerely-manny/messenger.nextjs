@@ -7,7 +7,7 @@ type ChatListItemProps = {
     unread?: string,
 };
 
-function ChatListItem(props: ChatListItemProps) {
+const ChatListItem = (props: ChatListItemProps) => {
     const { active, unread } = props;
     return (
         <Link className={`chat-list-item ${active ? 'chat-list-item-active' : ''}`} href="/messenger/25">
@@ -38,7 +38,7 @@ function ChatListItem(props: ChatListItemProps) {
             </div>
         </Link>
     );
-}
+};
 
 ChatListItem.defaultProps = {
     active: false,

@@ -1,0 +1,75 @@
+@import 'scss/variables.scss';
+
+.notifications-viewport {
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+.pu-notification {
+    position: relative;
+
+    display: block;
+
+    box-sizing: border-box;
+    width: 200px;
+    margin: 15px;
+    padding: 10px;
+
+    border: 1px solid $white40;
+    border-radius: 10px;
+
+    transition: margin 0.5s, padding 0.5s;
+
+    .pu-notification-message {
+        font-weight: 200;
+    }
+
+    .pu-notification-title,
+    .pu-notification-message {
+        transition: line-height 0.5s;
+    }
+
+    .pu-notification-close {
+        cursor: pointer;
+
+        position: absolute;
+        top: -10px;
+        right: -10px;
+
+        display: block;
+
+        height: 25px;
+        margin: 0;
+        padding: 0;
+
+        color: $white80;
+
+        background: transparent;
+        background: $white20;
+        border: 0;
+        border-radius: 25px;
+        outline: 0;
+
+        transition: background 0.2s;
+
+        &:hover {
+            background: $red60;
+        }
+    }
+
+    &[data-state='open'] {
+        animation: bounceInRight 0.5s;
+    }
+
+    &[data-state='closed'] {
+        margin: 0;
+        padding: 0;
+        animation: zoomOutRight 0.5s;
+
+        .pu-notification-title,
+        .pu-notification-message {
+            line-height: 0;
+        }
+    }
+}

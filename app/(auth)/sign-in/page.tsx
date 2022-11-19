@@ -1,9 +1,12 @@
 'use client';
 
+import { addNotification } from 'components/PopUpNotifications';
+import { StyledForm, StyledFormTypes } from 'components/StyledForm';
+import withStoreProvider from 'components/withStoreProvider';
 import Link from 'next/link';
+import { useDispatch } from 'react-redux';
+import fonts from 'scss/fonts';
 import * as Yup from 'yup';
-import { StyledForm, StyledFormTypes } from '../../../components/StyledForm';
-import fonts from '../../../scss/fonts';
 
 type SignInInputs = {
     login: string,
@@ -17,12 +20,17 @@ const SignInSchema = Yup.object().shape({
         .required('Please input your password'),
 });
 
-export default function SignIn() {
+const SignIn = () => {
+    const dispatch = useDispatch();
     const submitHandler: StyledFormTypes.Handler<SignInInputs> = (
         values,
         actions,
     ) => {
-        console.log(values);
+        dispatch(addNotification({
+            type: 'success',
+            message: JSON.stringify(values).replaceAll(',', ' ') || 'Undefined',
+            title: 'Sent:',
+        }));
         actions.setSubmitting(false);
     };
     return (
@@ -46,4 +54,6 @@ export default function SignIn() {
             </p>
         </>
     );
-}
+};
+
+export default withStoreProvider(SignIn);

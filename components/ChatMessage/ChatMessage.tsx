@@ -5,7 +5,7 @@ type ChatMessageProps = HTMLProps<HTMLDivElement> & {
     fromSelf?: boolean,
 };
 
-export default function ChatMessage(props: ChatMessageProps) {
+const ChatMessage = (props: ChatMessageProps) => {
     const { children, fromSelf } = props;
     return (
         <div className={`message-container ${fromSelf ? 'message-self' : ''}`}>
@@ -19,8 +19,10 @@ export default function ChatMessage(props: ChatMessageProps) {
             </time>
         </div>
     );
-}
+};
 
 ChatMessage.defaultProps = {
     fromSelf: false,
 };
+
+export default ChatMessage;

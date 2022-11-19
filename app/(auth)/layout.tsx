@@ -1,13 +1,15 @@
+'use client';
+
 import './auth.scss';
 
-export default function AuthLayout({ children }: {
+const AuthLayout = ({ children }: {
     children: React.ReactNode;
-}) {
-    return (
-        <main className="auth-page">
-            <section className="auth-window">
-                {children}
-            </section>
-        </main>
-    );
-}
+}) => (
+    <main className="auth-page">
+        <section className="auth-window">
+            {children}
+        </section>
+    </main>
+);
+
+export default AuthLayout;
