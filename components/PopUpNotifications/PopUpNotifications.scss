@@ -13,14 +13,21 @@
 
     box-sizing: border-box;
     width: 200px;
-    margin: 10px;
-    padding: 5px;
+    margin: 15px;
+    padding: 10px;
 
     border: 1px solid $white40;
     border-radius: 10px;
 
+    transition: margin 0.5s, padding 0.5s;
+
     .pu-notification-message {
         font-weight: 200;
+    }
+
+    .pu-notification-title,
+    .pu-notification-message {
+        transition: line-height 0.5s;
     }
 
     .pu-notification-close {
@@ -56,6 +63,13 @@
     }
 
     &[data-state='closed'] {
+        margin: 0;
+        padding: 0;
         animation: zoomOutRight 0.5s;
+
+        .pu-notification-title,
+        .pu-notification-message {
+            line-height: 0;
+        }
     }
 }
