@@ -13,3 +13,13 @@
     animation-timing-function: cubic-bezier(0.1, 0.7, 1);
     animation-direction: alternate;
 }
+
+@keyframes slide-right {
+    from {
+        transform: translateX(var(--radix-toast-swipe-end-x));
+    }
+
+    to {
+        transform: translateX(100%);
+    }
+}
