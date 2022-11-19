@@ -1,22 +1,33 @@
 'use client';
 
+import { ApiResponse } from 'api-types/general';
+import { SignUpInputs, SignUpSchema } from 'api-types/signup';
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { addNotification } from 'components/PopUpNotifications/slice';
+import { StyledForm, StyledFormTypes } from 'components/StyledForm';
+import withStoreProvider from 'components/withStoreProvider';
 import Link from 'next/link';
-import { StyledForm, StyledFormTypes } from '../../../components/StyledForm';
-import { ApiResponse } from '../../../api-types/general';
-import { SignUpSchema, SignUpInputs } from '../../../api-types/signup';
-import fonts from '../../../scss/fonts';
+import { useDispatch } from 'react-redux';
+import fonts from 'scss/fonts';
 
-export default function SignUp() {
+const SignUp = () => {
+    const dispatch = useDispatch();
     const submitHandler: StyledFormTypes.Handler<SignUpInputs> = (
         values,
         actions,
     ) => {
         const res = axios.post<SignUpInputs, AxiosResponse<ApiResponse>>('/api/auth/signup', values);
         res.then((r) => {
-            console.log(r.data.payload);
+            dispatch(addNotification({
+                type: 'success',
+                message: JSON.stringify(r.data.payload).replaceAll(',', ' ') || 'Undefined',
+                title: 'Sent:',
+            }));
         }).catch((e: AxiosError<ApiResponse>) => {
-            console.log(e.response?.data.message);
+            dispatch(addNotification({
+                type: 'error',
+                message: e.response?.data.message || 'Error sending data',
+            }));
         }).finally(() => {
             actions.setSubmitting(false);
         });
@@ -49,4 +60,6 @@ export default function SignUp() {
             </p>
         </>
     );
-}
+};
+
+export default withStoreProvider(SignUp);
