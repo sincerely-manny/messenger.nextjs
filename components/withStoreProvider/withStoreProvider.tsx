@@ -5,7 +5,7 @@
 import { Provider } from 'react-redux';
 import { store } from 'store';
 
-const withStoreProvider = <T extends Record<string, unknown>>(
+const withStoreProvider = <T extends object>(
     WrappedComponent: React.ComponentType<T>,
 ) => (props: T) => (
     <Provider store={store}>
