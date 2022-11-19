@@ -1,6 +1,6 @@
 import './global.scss';
 import fonts from 'scss/fonts';
-import PopUpNotificationsProvider from 'components/PopUpNotifications/PopUpNotificationsProvider';
+import PopUpNotificationsProvider from 'components/PopUpNotifications';
 
 export default function RootLayout({ children }: {
     children: React.ReactNode;

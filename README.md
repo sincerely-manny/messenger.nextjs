@@ -14,3 +14,4 @@
 * 🗄️ Prisma (SQLite)
 * 📋 Forms component (Formik)
 * 🔏 Client-side & server-side form validation (yup)
+* 🔔 Notifications (Redux + Radix)

@@ -8,7 +8,7 @@ import PopUpNotifications from './PopUpNotifications';
 export default function PopUpNotificationsProvider() {
     return (
         <Provider store={store}>
-            <Toast.Provider duration={99999999}>
+            <Toast.Provider>
                 <PopUpNotifications />
             </Toast.Provider>
         </Provider>
