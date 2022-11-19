@@ -5,7 +5,7 @@ import { useAppSelector } from 'store/hooks';
 import './PopUpNotifications.scss';
 import { dismissNotification } from './slice';
 
-export default function PopUpNotifications() {
+const PopUpNotifications = () => {
     const notifications = useAppSelector((state) => state.notifications);
     const dispatch = useDispatch();
     const openStateHandler = (id: string) => (isOpen: boolean) => {
@@ -31,4 +31,6 @@ export default function PopUpNotifications() {
             <Toast.Viewport className="notifications-viewport" />
         </>
     );
-}
+};
+
+export default PopUpNotifications;

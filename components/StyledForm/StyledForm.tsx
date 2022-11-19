@@ -4,7 +4,7 @@ import {
 import { StyledFormProps } from './types';
 import './StyledForm.scss';
 
-export default function StyledForm<Values extends FormikValues>(props: StyledFormProps<Values>) {
+const StyledForm = <Values extends FormikValues>(props: StyledFormProps<Values>) => {
     const {
         initialValues, yupValidationSchema, onSubmit, className, inputsList,
     } = props;
@@ -48,4 +48,6 @@ export default function StyledForm<Values extends FormikValues>(props: StyledFor
             )}
         </Formik>
     );
-}
+};
+
+export default StyledForm;
