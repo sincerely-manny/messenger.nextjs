@@ -39,6 +39,7 @@ form.styled-form {
 
             &.invalid {
                 border-color: $red;
+                animation: headShake 0.5s;
             }
         }
     }

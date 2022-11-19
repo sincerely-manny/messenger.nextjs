@@ -1,6 +1,7 @@
 'use client';
 
 import { addNotification } from 'components/PopUpNotifications';
+import withStoreProvider from 'components/withStoreProvider';
 import { useDispatch } from 'react-redux';
 
 const Home = () => {
@@ -15,4 +16,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default withStoreProvider(Home);

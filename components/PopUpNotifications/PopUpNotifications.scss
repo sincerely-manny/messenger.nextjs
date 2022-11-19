@@ -50,4 +50,12 @@
             background: $red60;
         }
     }
+
+    &[data-state='open'] {
+        animation: bounceInRight 0.5s;
+    }
+
+    &[data-state='closed'] {
+        animation: zoomOutRight 0.5s;
+    }
 }
