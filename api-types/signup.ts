@@ -31,4 +31,6 @@ export const SignUpSchema = Yup.object().shape({
         .required('Please input your password'),
 });
 
-export type SignUpResponse = (ApiResponse<{ id: number }> & { status: 'ok' });
+export type SignUpResponse =
+    (ApiResponse<{ id: number }> & { status: 'ok' }) |
+    (ApiResponse<Yup.ValidationError> & { status: 'error' });

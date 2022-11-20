@@ -1,7 +1,6 @@
 'use client';
 
-import { ApiResponse } from 'api-types/general';
-import { SignUpInputs, SignUpSchema } from 'api-types/signup';
+import { SignUpInputs, SignUpResponse, SignUpSchema } from 'api-types/signup';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { addNotification } from 'components/PopUpNotifications/slice';
 import { StyledForm, StyledFormTypes } from 'components/StyledForm';
@@ -12,23 +11,30 @@ import fonts from 'scss/fonts';
 
 const SignUp = () => {
     const dispatch = useDispatch();
+    const errors: Record<string, string> = {};
     const submitHandler: StyledFormTypes.Handler<SignUpInputs> = (
         values,
         actions,
     ) => {
-        const res = axios.post<SignUpInputs, AxiosResponse<ApiResponse>>('/api/auth/signup', values);
+        const res = axios.post<SignUpInputs, AxiosResponse<SignUpResponse>>('/api/auth/signup', values);
         res.then((r) => {
             dispatch(addNotification({
                 type: 'success',
                 message: JSON.stringify(r.data.payload).replaceAll(',', ' ') || 'Undefined',
                 title: 'Sent:',
             }));
-        }).catch((e: AxiosError<ApiResponse>) => {
-            dispatch(addNotification({
-                type: 'error',
-                message: e.response?.data.message || 'Error sending data',
-            }));
-            console.log(e.response?.data);
+        }).catch((e: AxiosError<SignUpResponse>) => {
+            if (e.response?.data.status === 'error' && e.response.data.payload?.path) {
+                // We've got a Yup.ValidationError - let's hilight the field
+                const { path, message } = e.response.data.payload;
+                errors[path] = message;
+            } else {
+                // Probably something else – just nitify
+                dispatch(addNotification({
+                    type: 'error',
+                    message: e.response?.data.message || 'Error sending data',
+                }));
+            }
         }).finally(() => {
             actions.setSubmitting(false);
         });
@@ -42,6 +48,7 @@ const SignUp = () => {
                     login: '', password: '', name: '', confirmPassword: '', email: '',
                 }}
                 onSubmit={submitHandler}
+                externalErrors={errors}
                 inputsList={[
                     { type: 'text', name: 'name', label: 'Name' },
                     { type: 'text', name: 'email', label: 'Email' },

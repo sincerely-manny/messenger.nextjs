@@ -1,3 +1,3 @@
-import { getSearchHandler } from '../search';
+import getUserByUniqueHandler from 'api-types/getUserByUniqueHandler';
 
-export default getSearchHandler('login');
+export default getUserByUniqueHandler('email');

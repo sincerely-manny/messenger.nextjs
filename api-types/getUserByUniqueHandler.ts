@@ -2,7 +2,7 @@ import { Prisma, PrismaClient, User } from '@prisma/client';
 import { ApiResponse, StatusCode } from 'api-types/general';
 import Rest from 'api-types/rest';
 
-export const getSearchHandler = <T extends 'login' | 'email' | 'id'>(field: T) => {
+const getUserByUniqueHandler = <T extends 'login' | 'email' | 'id'>(field: T) => {
     class Search extends Rest<undefined, ApiResponse<User | null>, { [key in T]: string }> {
         get = async () => {
             if (this.query === undefined || this.query[field] === undefined) {
@@ -20,13 +20,19 @@ export const getSearchHandler = <T extends 'login' | 'email' | 'id'>(field: T) =
                         [field]: field === 'id' ? parseInt(this.query[field], 10) : this.query[field],
                     },
                 });
-                if (user) {
+                if (user !== null) {
                     user.password = '';
+                    this.respond(StatusCode.Ok, {
+                        status: 'ok',
+                        payload: user,
+                    });
+                } else {
+                    this.respond(StatusCode.NotFound, {
+                        status: 'error',
+                        payload: user,
+                        message: 'User not found',
+                    });
                 }
-                this.respond(StatusCode.Ok, {
-                    status: 'ok',
-                    payload: user,
-                });
             } catch (err) {
                 this.respond(StatusCode.BadRequest, {
                     status: 'error',
@@ -41,4 +47,4 @@ export const getSearchHandler = <T extends 'login' | 'email' | 'id'>(field: T) =
     return new Search().handler;
 };
 
-export default getSearchHandler('id');
+export default getUserByUniqueHandler;
