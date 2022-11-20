@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "13.0.4",
+    "@types/bcrypt": "5.0.0",
     "@types/jest": "29.2.3",
     "@typescript-eslint/eslint-plugin": "5.43.0",
     "@typescript-eslint/parser": "5.43.0",

@@ -28,6 +28,7 @@ const SignUp = () => {
                 type: 'error',
                 message: e.response?.data.message || 'Error sending data',
             }));
+            console.log(e.response?.data);
         }).finally(() => {
             actions.setSubmitting(false);
         });

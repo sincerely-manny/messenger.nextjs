@@ -1,21 +1,31 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { ApiResponse } from './general';
+import { ApiResponse, ApiResponseError, StatusCode } from './general';
 
-interface NextApiRequestExtended<RequestBodyType> extends NextApiRequest {
+type Q = Partial<{ [key: string]: string | string[]; }>;
+
+interface NextApiRequestExtended<RequestBodyType, QueryType extends Q> extends NextApiRequest {
     body: RequestBodyType,
+    query: QueryType,
 }
 
-export default abstract class Rest<RequestBodyType = undefined, PayloadType = undefined> {
-    protected request!: NextApiRequestExtended<RequestBodyType>;
+export default abstract class Rest<
+    RequestBodyType = undefined,
+    ResponseBodyType extends ApiResponse<unknown> = ApiResponse<undefined>,
+    QueryType extends Q = Record<string, never>,
+> {
+    protected request!: NextApiRequestExtended<RequestBodyType, QueryType>;
 
-    protected response!: NextApiResponse<ApiResponse<PayloadType>>;
+    protected response!: NextApiResponse<ResponseBodyType | ApiResponseError>;
+
+    protected query?: typeof this.request.query;
 
     public handler = (
-        req: NextApiRequestExtended<RequestBodyType>,
-        res: NextApiResponse<ApiResponse<PayloadType>>,
+        req: typeof this.request,
+        res: typeof this.response,
     ) => {
         this.request = req;
         this.response = res;
+        this.query = req.query;
         if (this.request.method === 'GET') {
             this.get();
             return;
@@ -31,6 +41,10 @@ export default abstract class Rest<RequestBodyType = undefined, PayloadType = un
         if (this.request.method === 'DELETE') {
             this.delete();
         }
+    };
+
+    protected respond = (code: StatusCode, responseData: ResponseBodyType | ApiResponseError) => {
+        this.response.status(code).json(responseData);
     };
 
     protected get = () => {
@@ -50,7 +64,7 @@ export default abstract class Rest<RequestBodyType = undefined, PayloadType = un
     };
 
     private notImplenented = () => {
-        this.response?.status(404).json({
+        this.respond(StatusCode.NotFound, {
             status: 'error',
             message: `Method ${this.request?.method || ''} is not implemented`,
         });
