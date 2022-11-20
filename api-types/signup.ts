@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { ApiResponse } from './general';
 
 export type SignUpInputs = {
     name?: string,
@@ -30,9 +31,6 @@ export const SignUpSchema = Yup.object().shape({
         .required('Please input your password'),
 });
 
-export const SignUpSchema2 = Yup.object().shape({
-    name: Yup.string()
-        .ensure()
-        .trim()
-        .max(30, 'Name shouldn&apos;t be longer than 30 symbols'),
-});
+export type SignUpResponse =
+    (ApiResponse<{ id: number }> & { status: 'ok' }) |
+    (ApiResponse<Yup.ValidationError> & { status: 'error' });

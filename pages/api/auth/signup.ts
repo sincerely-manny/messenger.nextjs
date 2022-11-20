@@ -1,23 +1,77 @@
-import { ValidationError } from 'yup';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { StatusCode } from 'api-types/general';
 import Rest from 'api-types/rest';
-import { SignUpInputs, SignUpSchema } from 'api-types/signup';
+import { SignUpInputs, SignUpResponse, SignUpSchema } from 'api-types/signup';
+import { hashSync } from 'bcrypt';
+import { ValidationError } from 'yup';
 
-class SignUp extends Rest<SignUpInputs, unknown> {
-    post = () => {
+class SignUp extends Rest<SignUpInputs, SignUpResponse> {
+    post = async () => {
         const { body } = this.request;
+        let parsedBody: SignUpInputs;
         try {
-            const parsedBody = SignUpSchema.validateSync(body, { stripUnknown: true });
-            this.response.status(StatusCode.Ok).json({
+            parsedBody = SignUpSchema.validateSync(body, { stripUnknown: true });
+        } catch (err) {
+            this.respond(StatusCode.BadRequest, {
+                status: 'error',
+                message: err instanceof ValidationError ? err.message : 'Unknown validation error',
+                payload: err instanceof ValidationError ? err : undefined,
+            });
+            return;
+        }
+
+        const prisma = new PrismaClient();
+
+        try {
+            const usersWithSameLogin = await prisma.user.count({
+                where: {
+                    login: parsedBody.login,
+                },
+            });
+            if (usersWithSameLogin !== 0) {
+                throw new ValidationError('This login is already taken', parsedBody.login, 'login');
+            }
+            const usersWithSameEmail = await prisma.user.count({
+                where: {
+                    email: parsedBody.email,
+                },
+            });
+            if (usersWithSameEmail !== 0) {
+                throw new ValidationError('User with this e-mail is already regitred', parsedBody.email, 'email');
+            }
+        } catch (err) {
+            this.respond(StatusCode.BadRequest, {
+                status: 'error',
+                message: err instanceof ValidationError ? err.message : 'Unknown error cheking for unique fields',
+                payload: err instanceof ValidationError ? err : undefined,
+            });
+            return;
+        }
+
+        const dataToDB = {
+            name: parsedBody.name,
+            email: parsedBody.email,
+            login: parsedBody.login,
+            password: hashSync(parsedBody.password, 5),
+        };
+
+        try {
+            const user = await prisma.user.create({
+                data: dataToDB,
+            });
+            this.respond(StatusCode.Ok, {
                 status: 'ok',
-                payload: parsedBody,
+                payload: {
+                    id: user.id,
+                },
             });
         } catch (err) {
-            const message = err instanceof ValidationError ? err.message : 'Validation error';
-            this.response?.status(StatusCode.BadRequest).json({
+            this.respond(StatusCode.BadRequest, {
                 status: 'error',
-                message,
+                message: err instanceof Prisma.PrismaClientKnownRequestError ? err.message : 'Unknown DB error',
             });
+        } finally {
+            await prisma.$disconnect();
         }
     };
 }
