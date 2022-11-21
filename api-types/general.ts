@@ -4,6 +4,11 @@ export type ApiResponse<Payload = undefined> = {
     payload?: Payload,
 };
 
+export type ApiResponseError = {
+    status: 'error',
+    message: string,
+};
+
 export enum StatusCode {
     Ok = 200,
     BadRequest = 400,
