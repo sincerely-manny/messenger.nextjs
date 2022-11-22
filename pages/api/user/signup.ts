@@ -62,7 +62,7 @@ class SignUp extends Rest<SignUpInputs, SignUpResponse> {
             this.respond(StatusCode.Ok, {
                 status: 'ok',
                 payload: {
-                    id: user.id,
+                    id: user.id.toString(),
                 },
             });
         } catch (err) {
