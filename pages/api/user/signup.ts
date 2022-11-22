@@ -2,7 +2,7 @@ import { Prisma, PrismaClient } from '@prisma/client';
 import { StatusCode } from 'api-types/general';
 import Rest from 'api-types/rest';
 import { SignUpInputs, SignUpResponse, SignUpSchema } from 'api-types/signup';
-import { hashSync } from 'bcrypt';
+import { hash } from 'bcrypt';
 import { ValidationError } from 'yup';
 
 class SignUp extends Rest<SignUpInputs, SignUpResponse> {
@@ -37,7 +37,7 @@ class SignUp extends Rest<SignUpInputs, SignUpResponse> {
                 },
             });
             if (usersWithSameEmail !== 0) {
-                throw new ValidationError('User with this e-mail is already regitred', parsedBody.email, 'email');
+                throw new ValidationError('User with this e-mail is already registred', parsedBody.email, 'email');
             }
         } catch (err) {
             this.respond(StatusCode.BadRequest, {
@@ -52,7 +52,7 @@ class SignUp extends Rest<SignUpInputs, SignUpResponse> {
             name: parsedBody.name,
             email: parsedBody.email,
             login: parsedBody.login,
-            password: hashSync(parsedBody.password, 5),
+            password: await hash(parsedBody.password, 10),
         };
 
         try {

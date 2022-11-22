@@ -1,7 +1,7 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { PrismaClient } from '@prisma/client';
 import { compare } from 'bcrypt';
-import NextAuth, { User } from 'next-auth';
+import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 const prisma = new PrismaClient();
@@ -18,8 +18,9 @@ export const authOptions = {
         /// signOut: '/auth/signout',
         // error: '/auth/error', // Error code passed in query string as ?error=
         // verifyRequest: '/auth/verify-request', // (used for check email message)
-        newUser: '/sign-up',
+        // newUser: '/sign-up',
     },
+    site: process.env.NEXTAUTH_URL || 'http://localhost:3000',
     providers: [
         CredentialsProvider({
             name: 'Login',
@@ -32,20 +33,22 @@ export const authOptions = {
                     return null;
                 }
                 const { login, password } = credentials;
+                // console.log(credentials);
 
                 const user = await prisma.user.findUnique({
                     where: { login },
                 });
+                // console.log(user);
+                // console.log('compare:', await compare(password, user?.password || ''));
                 await prisma.$disconnect();
                 if (user === null || await compare(password, user.password)) {
                     return null;
                 }
                 return {
-                    id: user.id.toString(),
+                    id: user.id,
                     name: user.name,
                     email: user.email,
-                    image: user.image as User['image'],
-                } as User;
+                };
             },
         }),
     ],
