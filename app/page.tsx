@@ -14,10 +14,11 @@ const Home = () => {
         }));
     };
     const session = useSession();
-    console.log(session);
+    // console.log(session);
     return (
         <div>
             <button type="button" onClick={handleClick}>NOTIFY!</button>
+            <div>{JSON.stringify(session)}</div>
         </div>
     );
 };
