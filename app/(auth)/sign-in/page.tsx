@@ -1,11 +1,9 @@
 'use client';
 
-import axios, { AxiosResponse } from 'axios';
 import { addNotification } from 'components/PopUpNotifications';
 import { StyledForm, StyledFormTypes } from 'components/StyledForm';
 import withStoreProvider from 'components/withStoreProvider';
-import { User } from 'next-auth';
-import { getCsrfToken, signIn } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import fonts from 'scss/fonts';
@@ -30,22 +28,8 @@ const SignIn = () => {
         actions,
     ) => {
         (async () => {
-            // const csrfToken = await getCsrfToken();
-            // const res = await axios.post<SignInInputs, AxiosResponse<User | null>>(
-            //     '/api/auth/signin/credentials',
-            //     {
-            //         csrfToken,
-            //         ...values,
-            //     },
-            // );
-            // dispatch(addNotification({
-            //     type: 'success',
-            //     title: 'Sent:',
-            //     message: JSON.stringify(res.data).replaceAll(',', ' ') || 'Undefined',
-            // }));
-            // actions.setSubmitting(false);
             const res = await signIn('credentials', { redirect: false, ...values });
-            console.log(res);
+            // console.log(res);
             dispatch(addNotification({
                 type: 'success',
                 title: 'Sent:',
