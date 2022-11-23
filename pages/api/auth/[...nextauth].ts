@@ -10,7 +10,6 @@ const prisma = new PrismaClient();
 export const authOptions = {
     adapter: PrismaAdapter(prisma),
     session: {
-        // strategy: 'database' as SessionStrategy,
         maxAge: 30 * 24 * 60 * 60, // 30 days
         updateAge: 24 * 60 * 60, // 24 hours
     },
