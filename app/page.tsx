@@ -1,7 +1,9 @@
 'use client';
 
 import { addNotification } from 'components/PopUpNotifications';
+import withSessionProvider from 'components/withSessionProvider';
 import withStoreProvider from 'components/withStoreProvider';
+import { useSession } from 'next-auth/react';
 import { useDispatch } from 'react-redux';
 
 const Home = () => {
@@ -11,9 +13,14 @@ const Home = () => {
             message: 'Hello there!',
         }));
     };
+    const session = useSession();
+    // console.log(session);
     return (
-        <button type="button" onClick={handleClick}>NOTIFY!</button>
+        <div>
+            <button type="button" onClick={handleClick}>NOTIFY!</button>
+            <div>{JSON.stringify(session)}</div>
+        </div>
     );
 };
 
-export default withStoreProvider(Home);
+export default withSessionProvider(withStoreProvider(Home));

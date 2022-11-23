@@ -3,6 +3,7 @@
 import { addNotification } from 'components/PopUpNotifications';
 import { StyledForm, StyledFormTypes } from 'components/StyledForm';
 import withStoreProvider from 'components/withStoreProvider';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import fonts from 'scss/fonts';
@@ -26,12 +27,21 @@ const SignIn = () => {
         values,
         actions,
     ) => {
-        dispatch(addNotification({
-            type: 'success',
-            message: JSON.stringify(values).replaceAll(',', ' ') || 'Undefined',
-            title: 'Sent:',
-        }));
-        actions.setSubmitting(false);
+        (async () => {
+            const res = await signIn('credentials', { redirect: false, ...values });
+            // console.log(res);
+            dispatch(addNotification({
+                type: 'success',
+                title: 'Sent:',
+                message: JSON.stringify(res).replaceAll(',', ' ') || 'Undefined',
+            }));
+            actions.setSubmitting(false);
+        })().catch((e: Error) => {
+            dispatch(addNotification({
+                type: 'error',
+                message: e.message || 'Error sending data',
+            }));
+        });
     };
     return (
         <>
