@@ -2,7 +2,7 @@ import { Prisma, PrismaClient } from '@prisma/client';
 import { StatusCode } from 'api-types/general';
 import Rest from 'api-types/rest';
 import { SignUpInputs, SignUpResponse, SignUpSchema } from 'api-types/signup';
-import { hashSync } from 'bcrypt';
+import { hash } from 'bcrypt';
 import { ValidationError } from 'yup';
 
 class SignUp extends Rest<SignUpInputs, SignUpResponse> {
@@ -23,21 +23,21 @@ class SignUp extends Rest<SignUpInputs, SignUpResponse> {
         const prisma = new PrismaClient();
 
         try {
-            const usersWithSameLogin = await prisma.user.count({
-                where: {
-                    login: parsedBody.login,
-                },
-            });
-            if (usersWithSameLogin !== 0) {
-                throw new ValidationError('This login is already taken', parsedBody.login, 'login');
-            }
+            // const usersWithSameLogin = await prisma.user.count({
+            //     where: {
+            //         login: parsedBody.login,
+            //     },
+            // });
+            // if (usersWithSameLogin !== 0) {
+            //  throw new ValidationError('This login is already taken', parsedBody.login, 'login');
+            // }
             const usersWithSameEmail = await prisma.user.count({
                 where: {
                     email: parsedBody.email,
                 },
             });
             if (usersWithSameEmail !== 0) {
-                throw new ValidationError('User with this e-mail is already regitred', parsedBody.email, 'email');
+                throw new ValidationError('User with this e-mail is already registred', parsedBody.email, 'email');
             }
         } catch (err) {
             this.respond(StatusCode.BadRequest, {
@@ -52,7 +52,7 @@ class SignUp extends Rest<SignUpInputs, SignUpResponse> {
             name: parsedBody.name,
             email: parsedBody.email,
             login: parsedBody.login,
-            password: hashSync(parsedBody.password, 5),
+            password: await hash(parsedBody.password, 10),
         };
 
         try {
@@ -62,7 +62,7 @@ class SignUp extends Rest<SignUpInputs, SignUpResponse> {
             this.respond(StatusCode.Ok, {
                 status: 'ok',
                 payload: {
-                    id: user.id,
+                    id: user.id.toString(),
                 },
             });
         } catch (err) {

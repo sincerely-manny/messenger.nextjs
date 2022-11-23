@@ -32,5 +32,5 @@ export const SignUpSchema = Yup.object().shape({
 });
 
 export type SignUpResponse =
-    (ApiResponse<{ id: number }> & { status: 'ok' }) |
+    (ApiResponse<{ id: string }> & { status: 'ok' }) |
     (ApiResponse<Yup.ValidationError> & { status: 'error' });

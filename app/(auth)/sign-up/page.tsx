@@ -16,7 +16,7 @@ const SignUp = () => {
         values,
         actions,
     ) => {
-        const res = axios.post<SignUpInputs, AxiosResponse<SignUpResponse>>('/api/auth/signup', values);
+        const res = axios.post<SignUpInputs, AxiosResponse<SignUpResponse>>('/api/user/signup', values);
         res.then((r) => {
             dispatch(addNotification({
                 type: 'success',
