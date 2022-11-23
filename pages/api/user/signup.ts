@@ -23,14 +23,14 @@ class SignUp extends Rest<SignUpInputs, SignUpResponse> {
         const prisma = new PrismaClient();
 
         try {
-            const usersWithSameLogin = await prisma.user.count({
-                where: {
-                    login: parsedBody.login,
-                },
-            });
-            if (usersWithSameLogin !== 0) {
-                throw new ValidationError('This login is already taken', parsedBody.login, 'login');
-            }
+            // const usersWithSameLogin = await prisma.user.count({
+            //     where: {
+            //         login: parsedBody.login,
+            //     },
+            // });
+            // if (usersWithSameLogin !== 0) {
+            //  throw new ValidationError('This login is already taken', parsedBody.login, 'login');
+            // }
             const usersWithSameEmail = await prisma.user.count({
                 where: {
                     email: parsedBody.email,

@@ -11,7 +11,7 @@
 * 🧪 Jest
 * β Next.js 13 (beta) features: app folder, fonts
 * 📠 REST api (Next.js)
-* 🗄️ Prisma (SQLite)
+* 🗄️ Prisma (PostgreSQL)
 * 📋 Forms component (Formik)
 * 🔏 Client-side & server-side form validation (yup)
 * 🔔 Notifications (Redux + Radix)

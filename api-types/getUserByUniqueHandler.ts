@@ -21,7 +21,7 @@ const getUserByUniqueHandler = <T extends 'login' | 'email' | 'id'>(field: T) =>
                     },
                 });
                 if (user !== null) {
-                    user.password = '';
+                    // user.password = '';
                     this.respond(StatusCode.Ok, {
                         status: 'ok',
                         payload: user,
