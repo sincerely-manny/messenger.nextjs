@@ -5,6 +5,8 @@ import { StyledForm, StyledFormTypes } from 'components/StyledForm';
 import withStoreProvider from 'components/withStoreProvider';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
+import { MouseEvent } from 'react';
+import { BsGithub } from 'react-icons/bs';
 import { useDispatch } from 'react-redux';
 import fonts from 'scss/fonts';
 import * as Yup from 'yup';
@@ -29,13 +31,23 @@ const SignIn = () => {
     ) => {
         (async () => {
             const res = await signIn('credentials', { redirect: false, ...values });
-            // console.log(res);
             dispatch(addNotification({
                 type: 'success',
                 title: 'Sent:',
                 message: JSON.stringify(res).replaceAll(',', ' ') || 'Undefined',
             }));
             actions.setSubmitting(false);
+        })().catch((e: Error) => {
+            dispatch(addNotification({
+                type: 'error',
+                message: e.message || 'Error sending data',
+            }));
+        });
+    };
+    const clickHandlerGithub = (ev: MouseEvent) => {
+        ev.preventDefault();
+        (async () => {
+            await signIn('github', { callbackUrl: '/messenger' });
         })().catch((e: Error) => {
             dispatch(addNotification({
                 type: 'error',
@@ -56,6 +68,9 @@ const SignIn = () => {
                     { type: 'submit', name: 'submit', label: 'Sign in' },
                 ]}
             />
+            <Link href="/sign-in" title="Sign-in with GitHub" className="oauth-icon" onClick={clickHandlerGithub}>
+                <BsGithub size="3em" />
+            </Link>
             <p className="diff-auth-option-link">
                 Don&apos;t have an account?&nbsp;
                 <Link href="/sign-up">

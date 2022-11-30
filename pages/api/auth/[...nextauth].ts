@@ -9,13 +9,14 @@ const prisma = new PrismaClient();
 
 export const authOptions = {
     adapter: PrismaAdapter(prisma),
+    debug: true,
     session: {
         // strategy: 'database' as SessionStrategy,
         maxAge: 30 * 24 * 60 * 60, // 30 days
         updateAge: 24 * 60 * 60, // 24 hours
     },
     pages: {
-        // signIn: '/sign-in',
+        signIn: '/sign-in',
         /// signOut: '/auth/signout',
         // error: '/auth/error', // Error code passed in query string as ?error=
         // verifyRequest: '/auth/verify-request', // (used for check email message)

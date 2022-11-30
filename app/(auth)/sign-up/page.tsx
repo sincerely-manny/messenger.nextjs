@@ -1,6 +1,6 @@
 'use client';
 
-import { SignUpInputs, SignUpResponse, SignUpSchema } from 'api-types/signup';
+import { SignUpInputs, SignUpResponse, SignUpSchema } from 'lib/api/signup';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { addNotification } from 'components/PopUpNotifications/slice';
 import { StyledForm, StyledFormTypes } from 'components/StyledForm';

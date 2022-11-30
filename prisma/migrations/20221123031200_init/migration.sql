@@ -8,6 +8,7 @@ CREATE TABLE "Account" (
     "refresh_token" STRING,
     "access_token" STRING,
     "expires_at" INT4,
+    "refresh_token_expires_in" INT4,
     "token_type" STRING,
     "scope" STRING,
     "id_token" STRING,
