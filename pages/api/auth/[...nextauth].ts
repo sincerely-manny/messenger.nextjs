@@ -11,7 +11,6 @@ export const authOptions = {
     adapter: PrismaAdapter(prisma),
     debug: true,
     session: {
-        // strategy: 'database' as SessionStrategy,
         maxAge: 30 * 24 * 60 * 60, // 30 days
         updateAge: 24 * 60 * 60, // 24 hours
     },
@@ -23,6 +22,7 @@ export const authOptions = {
         // newUser: '/sign-up',
     },
     site: process.env.NEXTAUTH_URL || 'http://localhost:3000',
+    // TODO: Credentials sign-in & sign-up
     providers: [
         // CredentialsProvider({
         //     name: 'Login',

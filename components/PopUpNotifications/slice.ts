@@ -18,7 +18,6 @@ export const popUpNotificationSlice = createSlice({
     },
 });
 
-// Action creators are generated for each case reducer function
 export const {
     addNotification,
     dismissNotification,
