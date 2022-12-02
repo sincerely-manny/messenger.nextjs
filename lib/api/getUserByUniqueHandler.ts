@@ -1,6 +1,6 @@
 import { Prisma, PrismaClient, User } from '@prisma/client';
-import { ApiResponse, StatusCode } from 'api-types/general';
-import Rest from 'api-types/rest';
+import { ApiResponse, StatusCode } from 'lib/api/general';
+import Rest from 'lib/api/rest';
 
 const getUserByUniqueHandler = <T extends 'login' | 'email' | 'id'>(field: T) => {
     class Search extends Rest<undefined, ApiResponse<User | null>, { [key in T]: string }> {

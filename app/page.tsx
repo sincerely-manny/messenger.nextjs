@@ -1,26 +1,25 @@
 'use client';
 
-import { addNotification } from 'components/PopUpNotifications';
+import Preloader from 'components/Preloader';
 import withSessionProvider from 'components/withSessionProvider';
-import withStoreProvider from 'components/withStoreProvider';
 import { useSession } from 'next-auth/react';
-import { useDispatch } from 'react-redux';
+import { redirect } from 'next/navigation';
+import './home.scss';
 
 const Home = () => {
-    const dispatch = useDispatch();
-    const handleClick = () => {
-        dispatch(addNotification({
-            message: 'Hello there!',
-        }));
-    };
-    const session = useSession();
-    // console.log(session);
+    const session = useSession({
+        required: true,
+    });
+
+    if (session.status === 'authenticated') {
+        redirect('/messenger');
+    }
+
     return (
-        <div>
-            <button type="button" onClick={handleClick}>NOTIFY!</button>
-            <div>{JSON.stringify(session)}</div>
-        </div>
+        <main className="entry-point-loading">
+            <Preloader />
+        </main>
     );
 };
 
-export default withSessionProvider(withStoreProvider(Home));
+export default withSessionProvider(Home);

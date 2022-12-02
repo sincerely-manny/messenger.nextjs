@@ -1,7 +1,7 @@
 import { Prisma, PrismaClient } from '@prisma/client';
-import { StatusCode } from 'api-types/general';
-import Rest from 'api-types/rest';
-import { SignUpInputs, SignUpResponse, SignUpSchema } from 'api-types/signup';
+import { StatusCode } from 'lib/api/general';
+import Rest from 'lib/api/rest';
+import { SignUpInputs, SignUpResponse, SignUpSchema } from 'lib/api/signup';
 import { hash } from 'bcrypt';
 import { ValidationError } from 'yup';
 

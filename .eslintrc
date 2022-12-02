@@ -43,6 +43,14 @@
                 ],
                 "depth": 3
             }
+        ],
+        "react/require-default-props": [
+            2,
+            {
+                "forbidDefaultForRequired": false,
+                "classes": "defaultProps",
+                "functions": "defaultArguments"
+            }
         ]
     },
     "overrides": [
