@@ -3,14 +3,25 @@
         background-position: 0% 0%;
     }
 
+    // 20% {
+    //     background-position: 100% 100%;
+    // }
+
+    // 40% {
+    //     background-position: 100% 0%;
+    // }
+
+    // 80% {
+    //     background-position: 100% 100%;
+    // }
+
     100% {
-        background-position: 10% 10%;
+        background-position: 100% 100%;
     }
 }
 
-.gradient-glow {
-    animation: gradient-glow 1s infinite;
-    animation-timing-function: cubic-bezier(0.1, 0.7, 1);
+@mixin gradient-glow {
+    animation: gradient-glow 5s infinite;
     animation-direction: alternate;
 }
 

@@ -37,6 +37,6 @@ h3 {
 main {
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(110deg, $dark-blue 0%, mix($dark-blue, $pink, 45%) 35%, $pink 50%);
+    background: linear-gradient(110deg, $dark-blue 0%, $pink 50%, $green 100%);
     background-size: 200% 200%;
 }

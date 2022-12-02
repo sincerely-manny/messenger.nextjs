@@ -1,0 +1,14 @@
+@import 'scss/variables.scss';
+@import 'scss/keyframes.scss';
+
+.entry-point-loading {
+    @include gradient-glow;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+        width: 300px;
+    }
+}
