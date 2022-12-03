@@ -16,4 +16,3 @@
 * 🔏 Client-side & server-side form validation (yup)
 * 🔔 Notifications (Redux + Radix)
 * 🗝️ User authentication (OAuth - Github: NextAuth)
-
