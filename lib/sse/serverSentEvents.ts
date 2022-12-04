@@ -8,6 +8,7 @@ export type ServerSentMessage = Record<string, unknown> | string;
 export enum ServerSentEventType {
     MESSAGE,
     TYPING,
+    PING,
 }
 
 class ServerSentEvents {
@@ -21,10 +22,17 @@ class ServerSentEvents {
         this.clients.delete(id);
     };
 
-    public send = (message: ServerSentMessage, type: ServerSentEventType, clientId: string) => {
+    public send = (
+        data: {
+            message: ServerSentMessage,
+            type: ServerSentEventType,
+            clientId: string,
+        },
+    ) => {
+        const { message, type, clientId } = data;
         const client = this.clients.get(clientId);
         if (client === undefined) {
-            throw new Error('Client is not connected');
+            return false;
         }
 
         const stream = [

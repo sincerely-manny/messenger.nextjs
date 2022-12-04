@@ -1,4 +1,8 @@
+import { StatusCode } from 'lib/api/general';
+import sse, { ServerSentEventType } from 'lib/sse/serverSentEvents';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { unstable_getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]';
 
 export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -10,16 +14,33 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.setHeader('Cache-Control', 'no-cache, no-transform');
     res.setHeader('X-Accel-Buffering', 'no');
 
-    const clientId = Date.now();
+    const session = await unstable_getServerSession(req, res, authOptions);
+    if (session === null) {
+        res.status(StatusCode.Unauthorized);
+        res.end('Unauthorized\n');
+        return;
+    }
+
+    const clientId = session.user.id;
+
+    sse.connect(clientId, res);
 
     console.log(`${clientId} Connected`);
 
     for (let i = 0; i < 5; i++) {
-        res.write(`data: Hello seq ${i} client: ${clientId}\n\n`);
+        sse.send({
+            message: {
+                hello: `seq ${i}`,
+                clientId,
+            },
+            type: ServerSentEventType.MESSAGE,
+            clientId,
+        });
         await sleep(1000);
     }
-    // res.end('done\n');
-    req.on('end', () => {
+
+    res.on('close', () => {
+        sse.disconnect(clientId);
         console.log(`${clientId} Connection closed`);
     });
 };
