@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import popUpNotificationReducer from 'components/PopUpNotifications/slice';
+import connectedStateReducer from 'app/messenger/connectedState.slice';
 
 export const store = configureStore({
     reducer: {
         notifications: popUpNotificationReducer,
+        connectedState: connectedStateReducer,
     },
 });
 

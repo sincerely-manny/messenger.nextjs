@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]';
 
-export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+// export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // curl -Nv localhost:3000/api/see
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -25,23 +25,32 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     sse.connect(clientId, res);
 
-    console.log(`${clientId} Connected`);
+    console.log(`${clientId} Connected`); // TODO: Check for double connection
 
-    for (let i = 0; i < 5; i++) {
-        sse.send({
-            message: {
-                hello: `seq ${i}`,
-                clientId,
-            },
-            type: ServerSentEventType.MESSAGE,
-            clientId,
-        });
-        await sleep(1000);
-    }
+    // for (let i = 0; i < 5; i++) {
+    //     sse.send({
+    //         message: {
+    //             hello: `seq ${i}`,
+    //             clientId,
+    //         },
+    //         type: ServerSentEventType.MESSAGE,
+    //         clientId,
+    //     });
+    //     await sleep(1000);
+    // }
 
     res.on('close', () => {
         sse.disconnect(clientId);
         console.log(`${clientId} Connection closed`);
+    });
+
+    sse.send({
+        message: {
+            hello: 'HELLOOOOO!!!',
+            clientId,
+        },
+        type: ServerSentEventType.MESSAGE,
+        clientId,
     });
 };
 

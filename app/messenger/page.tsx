@@ -8,26 +8,38 @@ import withSessionProvider from 'components/withSessionProvider';
 import withStoreProvider from 'components/withStoreProvider';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { FiSettings } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
+import { connectedState, setConnectedState } from './connectedState.slice';
 import './page.scss';
 
 const Messenger = () => {
-    useSession({
-        required: true,
-    });
+    useSession({ required: true });
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        const sse = new EventSource('/api/messenger', { withCredentials: true });
-        sse.onopen = () => {
+    const sse = useMemo(() => {
+        dispatch(setConnectedState(connectedState.CONNECTING));
+        const es = new EventSource('/api/messenger', { withCredentials: true });
+        es.onopen = () => {
+            dispatch(setConnectedState(connectedState.OPEN));
             dispatch(addNotification({ message: 'Connected to SSE gateway' }));
         };
-
-        return () => {
-            sse.close();
+        es.onerror = () => {
+            dispatch(setConnectedState(connectedState.CONNECTING));
+            dispatch(addNotification({ message: 'SSE connection lost. Reconnecting...' }));
         };
+        es.addEventListener('MESSAGE', (r) => {
+            dispatch(addNotification({
+                message: r.data as string,
+            }));
+            console.log(JSON.parse(r.data as string));
+        });
+        return es;
+    }, [dispatch]);
+
+    useEffect(() => () => {
+        dispatch(setConnectedState(connectedState.CLOSED));
+        sse.close();
     });
 
     return (
