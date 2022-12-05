@@ -1,4 +1,6 @@
+import { nanoid } from '@reduxjs/toolkit';
 import { StatusCode } from 'lib/api/general';
+import { Message } from 'lib/api/message';
 import sse, { ServerSentEventType } from 'lib/sse/serverSentEvents';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { unstable_getServerSession } from 'next-auth';
@@ -46,9 +48,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     sse.send({
         message: {
-            hello: 'HELLOOOOO!!!',
-            clientId,
-        },
+            text: 'HELLOOOOO!!!',
+            id: nanoid(),
+            senderId: clientId,
+        } as Message,
         type: ServerSentEventType.MESSAGE,
         clientId,
     });

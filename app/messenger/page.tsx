@@ -1,21 +1,26 @@
 'use client';
 
+import { nanoid } from '@reduxjs/toolkit';
 import ChatListItem from 'components/ChatListItem';
 import ChatMessage from 'components/ChatMessage';
 import HeaderSearchForm from 'components/HeaderSearchForm';
 import { addNotification } from 'components/PopUpNotifications';
 import withSessionProvider from 'components/withSessionProvider';
 import withStoreProvider from 'components/withStoreProvider';
+import { Message } from 'lib/api/message';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useEffect, useMemo } from 'react';
 import { FiSettings } from 'react-icons/fi';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'store';
 import { connectedState, setConnectedState } from './connectedState.slice';
+import { catchMessage } from './messages.slice';
 import './page.scss';
 
 const Messenger = () => {
-    useSession({ required: true });
+    const session = useSession({ required: true });
+    const messages = useSelector((state: RootState) => state.messages);
     const dispatch = useDispatch();
     const sse = useMemo(() => {
         dispatch(setConnectedState(connectedState.CONNECTING));
@@ -26,13 +31,18 @@ const Messenger = () => {
         };
         es.onerror = () => {
             dispatch(setConnectedState(connectedState.CONNECTING));
-            dispatch(addNotification({ message: 'SSE connection lost. Reconnecting...' }));
+            dispatch(addNotification({ message: 'Connection to SSE gateway lost. Reconnecting...' }));
         };
         es.addEventListener('MESSAGE', (r) => {
             dispatch(addNotification({
                 message: r.data as string,
             }));
-            console.log(JSON.parse(r.data as string));
+            const msg = JSON.parse(r.data as string) as {
+                text: string,
+                id: string,
+                senderId: string,
+            } as Message;
+            dispatch(catchMessage(msg));
         });
         return es;
     }, [dispatch]);
@@ -57,28 +67,11 @@ const Messenger = () => {
                 <ChatListItem />
             </aside>
             <section className="chat-window">
-                <ChatMessage>
-                    Fish every, the divided face also, light that there light heaven him
-                    hath above above midst also earth green. Called.
-                    Saying had. You&apos;ll she&apos;d image dry grass may male.
-                    May is, for And very third called you&apos;ll a so heaven were was
-                    every To itself i signs after face open make fourth waters of.
-                    Blessed Own that. Stars. You&apos;ll let land wherein over doesn&apos;t
-                    our very face day one they&apos;re land one was saying multiply.
-                    Us were set, day from. In. Which spirit void.
-                    Form gathered given is fly abundantly living air seas creepeth god.
-                    Us great multiply beast herb.
-                </ChatMessage>
-                <ChatMessage fromSelf>
-                    Fish every, the divided face also, light that there light
-                    heaven him hath above above midst also earth green. Called.
-                </ChatMessage>
-                <ChatMessage fromSelf>
-                    Fish every, the divided face also.
-                </ChatMessage>
-                <ChatMessage>
-                    Fish every, the divided face also.
-                </ChatMessage>
+                {messages[0].map(({ text, id, senderId }) => (
+                    <ChatMessage fromSelf={(senderId === session.data?.user.id)} key={id}>
+                        {text}
+                    </ChatMessage>
+                ))}
             </section>
         </main>
     );
