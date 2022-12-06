@@ -1,6 +1,5 @@
 'use client';
 
-import { nanoid } from '@reduxjs/toolkit';
 import ChatListItem from 'components/ChatListItem';
 import ChatMessage from 'components/ChatMessage';
 import HeaderSearchForm from 'components/HeaderSearchForm';
