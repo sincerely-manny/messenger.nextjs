@@ -6,7 +6,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]';
 
-// curl -Nv localhost:3000/api/see
+// curl -Nv localhost:3000/api/messenger
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     // res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Connection', 'keep-alive');
@@ -25,13 +25,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     sse.connect(clientId, res);
 
-    // console.log(`${clientId} Connected`); // TODO: Check for double connection
-
-    res.on('close', () => {
-        sse.disconnect(clientId);
-        // console.log(`${clientId} Connection closed`);
-    });
-
     sse.send({
         message: {
             text: 'HELLOOOOO!!!',
@@ -40,6 +33,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         } as Message,
         type: ServerSentEventType.MESSAGE,
         clientId,
+    });
+
+    res.on('close', () => {
+        sse.disconnect(clientId);
     });
 };
 

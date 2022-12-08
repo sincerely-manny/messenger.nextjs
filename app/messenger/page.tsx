@@ -9,8 +9,10 @@ import withStoreProvider from 'components/withStoreProvider';
 import { Message } from 'lib/api/message';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { useEffect, useMemo } from 'react';
-import { FiSettings } from 'react-icons/fi';
+import {
+    FormEvent, KeyboardEvent, useEffect, useMemo, useState,
+} from 'react';
+import { FiSend, FiSettings } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { connectedState, setConnectedState } from './connectedState.slice';
@@ -21,7 +23,7 @@ const Messenger = () => {
     const session = useSession({ required: true });
     const messages = useSelector((state: RootState) => state.messages);
     const dispatch = useDispatch();
-    const sse = useMemo(() => {
+    const sse = useMemo(() => { // setting connection to SSE endpoint
         dispatch(setConnectedState(connectedState.CONNECTING));
         const es = new EventSource('/api/messenger', { withCredentials: true });
         es.onopen = () => {
@@ -51,6 +53,31 @@ const Messenger = () => {
         sse.close();
     });
 
+    const [submitIsDisabled, setSubmitIsDisabled] = useState(true);
+
+    const handleResize = (e: FormEvent<HTMLTextAreaElement>) => {
+        const area = e.currentTarget;
+        area.rows = 1;
+        while ((area.scrollHeight > area.clientHeight) && area.rows < 5) {
+            area.rows += 1;
+        }
+    };
+
+    const textareaKeyUpHandler = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && !submitIsDisabled) {
+            e.preventDefault();
+            (e.currentTarget.parentElement as HTMLFormElement).submit();
+        }
+    };
+
+    const formInputHandler = (e: FormEvent<HTMLFormElement>) => {
+        if ((e.currentTarget.querySelector('textarea.new-message') as HTMLTextAreaElement).value.trim().length > 0) {
+            setSubmitIsDisabled(false);
+        } else {
+            setSubmitIsDisabled(true);
+        }
+    };
+
     return (
         <main className="messenger">
             <header className="chat-list-header">
@@ -71,6 +98,14 @@ const Messenger = () => {
                         {text}
                     </ChatMessage>
                 ))}
+                <div className="new-message-form">
+                    <form action="./" method="post" onInput={formInputHandler}>
+                        <textarea rows={1} className="new-message" placeholder="New message..." onInput={handleResize} onKeyDown={textareaKeyUpHandler} />
+                        <button type="submit" className="new-message-send" title="⌘/ctrl + enter" disabled={submitIsDisabled}>
+                            <FiSend size="2em" strokeWidth="1px" />
+                        </button>
+                    </form>
+                </div>
             </section>
         </main>
     );
