@@ -10,6 +10,7 @@ import { Message } from 'lib/api/message';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import {
+    createRef,
     FormEvent, KeyboardEvent, useEffect, useMemo, useState,
 } from 'react';
 import { FiSend, FiSettings } from 'react-icons/fi';
@@ -48,34 +49,64 @@ const Messenger = () => {
         return es;
     }, [dispatch]);
 
+    // purely for closing connection on unmounting
     useEffect(() => () => {
         dispatch(setConnectedState(connectedState.CLOSED));
+        dispatch(addNotification({ message: 'Connection to SSE gateway closed' }));
         sse.close();
+    }, [sse, dispatch]);
+
+    const [form, setForm] = useState({
+        message: '',
+        disabled: true,
     });
 
-    const [submitIsDisabled, setSubmitIsDisabled] = useState(true);
+    const textarea = createRef<HTMLTextAreaElement>();
 
-    const handleResize = (e: FormEvent<HTMLTextAreaElement>) => {
-        const area = e.currentTarget;
+    const sendMessage = () => {
+        dispatch(addNotification({ message: form.message }));
+        setForm({
+            message: '',
+            disabled: true,
+        });
+    };
+
+    // binding ctrl+enter to send
+    const textareaKeyDownHandler = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && !form.disabled) {
+            e.preventDefault();
+            sendMessage();
+        }
+    };
+
+    // handling state
+    const inputHadler = (e: FormEvent<HTMLTextAreaElement>) => {
+        const message = e.currentTarget.value;
+        let disabled = true;
+
+        if (message.trim().length > 0) {
+            disabled = false;
+        }
+
+        setForm({ ...form, message, disabled });
+    };
+
+    // setting textarea height
+    useEffect(() => {
+        const area = textarea.current;
+        if (!area) {
+            return;
+        }
+
         area.rows = 1;
         while ((area.scrollHeight > area.clientHeight) && area.rows < 5) {
             area.rows += 1;
         }
-    };
+    }, [form.message, textarea]);
 
-    const textareaKeyUpHandler = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && !submitIsDisabled) {
-            e.preventDefault();
-            (e.currentTarget.parentElement as HTMLFormElement).submit();
-        }
-    };
-
-    const formInputHandler = (e: FormEvent<HTMLFormElement>) => {
-        if ((e.currentTarget.querySelector('textarea.new-message') as HTMLTextAreaElement).value.trim().length > 0) {
-            setSubmitIsDisabled(false);
-        } else {
-            setSubmitIsDisabled(true);
-        }
+    const formSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        sendMessage();
     };
 
     return (
@@ -99,9 +130,17 @@ const Messenger = () => {
                     </ChatMessage>
                 ))}
                 <div className="new-message-form">
-                    <form action="./" method="post" onInput={formInputHandler}>
-                        <textarea rows={1} className="new-message" placeholder="New message..." onInput={handleResize} onKeyDown={textareaKeyUpHandler} />
-                        <button type="submit" className="new-message-send" title="⌘/ctrl + enter" disabled={submitIsDisabled}>
+                    <form action="./" method="post" onSubmit={formSubmitHandler}>
+                        <textarea
+                            rows={1}
+                            className="new-message"
+                            placeholder="New message..."
+                            onInput={inputHadler}
+                            onKeyDown={textareaKeyDownHandler}
+                            value={form.message}
+                            ref={textarea}
+                        />
+                        <button type="submit" className="new-message-send" title="⌘/ctrl + enter" disabled={form.disabled}>
                             <FiSend size="2em" strokeWidth="1px" />
                         </button>
                     </form>
