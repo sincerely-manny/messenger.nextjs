@@ -1,4 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { unstable_getServerSession } from 'next-auth';
+import { authOptions } from 'pages/api/auth/[...nextauth]';
 import { ApiResponse, ApiResponseError, StatusCode } from './general';
 
 type Q = Partial<{ [key: string]: string | string[]; }>;
@@ -45,6 +47,18 @@ export default abstract class Rest<
 
     protected respond = (code: StatusCode, responseData: ResponseBodyType | ApiResponseError) => {
         this.response.status(code).json(responseData);
+    };
+
+    public checkSession = async () => {
+        const session = await unstable_getServerSession(this.request, this.response, authOptions);
+        if (session === null) {
+            this.respond(StatusCode.Unauthorized, {
+                status: 'error',
+                message: 'Authorization required',
+            });
+            throw new Error('Authorization required');
+        }
+        return session;
     };
 
     protected get = () => {

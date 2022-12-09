@@ -11,8 +11,28 @@ export enum ServerSentEventType {
     PING,
 }
 
+// TODO: Returns the right instance of class only after page refresh (second connection). WTF????
+// Caching?!?!?!
 class ServerSentEvents {
-    private clients: Clients = new Map();
+    private static instance: ServerSentEvents;
+
+    public clients: Clients;
+
+    public id: string;
+
+    private constructor() {
+        this.clients = new Map();
+        this.id = nanoid();
+    }
+
+    static getInstance() {
+        if (this.instance) {
+            return this.instance;
+        }
+
+        this.instance = new ServerSentEvents();
+        return this.instance;
+    }
 
     public connect = (id: string, response: NextApiResponse) => {
         this.clients.set(id, response);
@@ -31,6 +51,9 @@ class ServerSentEvents {
     ) => {
         const { message, type, clientId } = data;
         const client = this.clients.get(clientId);
+
+        console.log(this.id, this.clients.keys());
+
         if (client === undefined) {
             return false;
         }
@@ -39,7 +62,7 @@ class ServerSentEvents {
             `event: ${ServerSentEventType[type]}`,
             `data: ${JSON.stringify(message)}`,
             `id: ${nanoid()}`,
-            'retry: 5000',
+            'retry: 10000',
             '\n',
         ].join('\n');
 
@@ -47,6 +70,6 @@ class ServerSentEvents {
     };
 }
 
-const sse = new ServerSentEvents();
+// global.processId = nanoid();
 
-export default sse;
+export default ServerSentEvents;

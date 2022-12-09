@@ -1,5 +1,6 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { PrismaClient } from '@prisma/client';
+import ServerSentEvents from 'lib/sse/serverSentEvents';
 // import { compare } from 'bcrypt';
 import NextAuth, { CallbacksOptions } from 'next-auth';
 // import CredentialsProvider from 'next-auth/providers/credentials';

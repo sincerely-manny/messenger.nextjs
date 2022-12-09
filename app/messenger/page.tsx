@@ -1,5 +1,6 @@
 'use client';
 
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import ChatListItem from 'components/ChatListItem';
 import ChatMessage from 'components/ChatMessage';
 import HeaderSearchForm from 'components/HeaderSearchForm';
@@ -26,7 +27,7 @@ const Messenger = () => {
     const dispatch = useDispatch();
     const sse = useMemo(() => { // setting connection to SSE endpoint
         dispatch(setConnectedState(connectedState.CONNECTING));
-        const es = new EventSource('/api/messenger', { withCredentials: true });
+        const es = new EventSource('/api/messenger/incoming');
         es.onopen = () => {
             dispatch(setConnectedState(connectedState.OPEN));
             dispatch(addNotification({ message: 'Connected to SSE gateway' }));
@@ -36,9 +37,6 @@ const Messenger = () => {
             dispatch(addNotification({ message: 'Connection to SSE gateway lost. Reconnecting...' }));
         };
         es.addEventListener('MESSAGE', (r) => {
-            dispatch(addNotification({
-                message: r.data as string,
-            }));
             const msg = JSON.parse(r.data as string) as {
                 text: string,
                 id: string,
@@ -64,11 +62,18 @@ const Messenger = () => {
     const textarea = createRef<HTMLTextAreaElement>();
 
     const sendMessage = () => {
-        dispatch(addNotification({ message: form.message }));
-        setForm({
-            message: '',
-            disabled: true,
-        });
+        axios.post('/api/messenger/outgoing', form)
+            .then(() => {
+                setForm({
+                    message: '',
+                    disabled: true,
+                });
+            })
+            .catch((err: AxiosError) => {
+                dispatch(addNotification({
+                    message: err.message,
+                }));
+            });
     };
 
     // binding ctrl+enter to send
