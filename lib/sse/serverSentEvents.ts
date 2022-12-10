@@ -1,7 +1,13 @@
 import { nanoid } from '@reduxjs/toolkit';
 import { NextApiResponse } from 'next';
 
-type Clients = Map<string, NextApiResponse>;
+type ActiveConnections = Map<string, {
+    response: NextApiResponse,
+    UserAgent: string,
+    created: string,
+}>;
+
+type Clients = Map<string, ActiveConnections>;
 
 export type ServerSentMessage = Record<string, unknown> | string;
 
@@ -35,7 +41,15 @@ class ServerSentEvents {
     }
 
     public connect = (id: string, response: NextApiResponse) => {
-        this.clients.set(id, response);
+        const connectionId = nanoid(5);
+        const activeConnections = this.clients.get(id) || new Map() as ActiveConnections;
+        activeConnections.set(connectionId, {
+            response,
+            UserAgent: 'UA',
+            created: Date.now().toString(),
+        });
+        this.clients.set(id, activeConnections);
+        return connectionId;
     };
 
     public disconnect = (id: string) => {
@@ -54,7 +68,8 @@ class ServerSentEvents {
 
         console.log(this.id, this.clients.keys());
 
-        if (client === undefined) {
+        if (client === undefined || !client.size) {
+            console.log('Client is not connected');
             return false;
         }
 
@@ -66,8 +81,14 @@ class ServerSentEvents {
             '\n',
         ].join('\n');
 
-        return client.write(stream);
+        // return client.write(stream);
+        client.forEach((connection) => {
+            connection.response.write(stream);
+        });
+        return true;
     };
 }
+
+ServerSentEvents.getInstance();
 
 export default ServerSentEvents;
