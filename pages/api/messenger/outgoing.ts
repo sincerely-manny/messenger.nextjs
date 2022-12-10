@@ -11,13 +11,9 @@ class Outgoing extends Rest<{ message: string }, ApiResponse> {
             return;
         }
 
-        // console.log('global.processId', global.processId);
-
         const sse = ServerSentEvents.getInstance();
 
         const clientId = session.user.id;
-
-        // console.log(clientId, this.request.body.message);
 
         sse.send({
             message: {

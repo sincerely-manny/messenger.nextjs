@@ -48,7 +48,7 @@ const Messenger = () => {
         dispatch(setConnectedState(connectedState.CLOSED));
         dispatch(addNotification({ message: 'Connection to SSE gateway closed' }));
         sse.close();
-    });
+    }, [dispatch, sse]);
 
     const [form, setForm] = useState({
         message: '',

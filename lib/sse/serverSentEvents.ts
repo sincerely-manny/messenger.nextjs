@@ -16,7 +16,7 @@ export enum ServerSentEventType {
 class ServerSentEvents {
     private static instance: ServerSentEvents;
 
-    public clients: Clients;
+    private clients: Clients;
 
     public id: string;
 
@@ -69,7 +69,5 @@ class ServerSentEvents {
         return client.write(stream);
     };
 }
-
-// global.processId = nanoid();
 
 export default ServerSentEvents;
