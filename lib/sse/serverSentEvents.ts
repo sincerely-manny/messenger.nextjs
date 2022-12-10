@@ -1,5 +1,5 @@
 import { nanoid } from '@reduxjs/toolkit';
-import { NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 type ActiveConnections = Map<string, {
     response: NextApiResponse,
@@ -40,12 +40,12 @@ class ServerSentEvents {
         return this.instance;
     }
 
-    public connect = (id: string, response: NextApiResponse) => {
+    public connect = (id: string, response: NextApiResponse, headers: NextApiRequest['headers']) => {
         const connectionId = nanoid(5);
         const activeConnections = this.clients.get(id) || new Map() as ActiveConnections;
         activeConnections.set(connectionId, {
             response,
-            UserAgent: 'UA',
+            UserAgent: headers['user-agent'] || 'Unknown',
             created: Date.now().toString(),
         });
         this.clients.set(id, activeConnections);
@@ -73,6 +73,8 @@ class ServerSentEvents {
             return false;
         }
 
+        console.log(clientId, client.keys());
+
         const stream = [
             `event: ${ServerSentEventType[type]}`,
             `data: ${JSON.stringify(message)}`,
@@ -88,7 +90,5 @@ class ServerSentEvents {
         return true;
     };
 }
-
-ServerSentEvents.getInstance();
 
 export default ServerSentEvents;

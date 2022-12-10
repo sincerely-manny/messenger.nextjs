@@ -16,7 +16,7 @@ class Incoming extends Rest {
 
         const clientId = session.user.id;
 
-        sse.connect(clientId, this.response);
+        sse.connect(clientId, this.response, this.request.headers);
 
         console.log('connected', clientId);
 
