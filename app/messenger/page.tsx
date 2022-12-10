@@ -5,6 +5,7 @@ import ChatListItem from 'components/ChatListItem';
 import ChatMessage from 'components/ChatMessage';
 import HeaderSearchForm from 'components/HeaderSearchForm';
 import { addNotification } from 'components/PopUpNotifications';
+import Preloader from 'components/Preloader';
 import withSessionProvider from 'components/withSessionProvider';
 import withStoreProvider from 'components/withStoreProvider';
 import { Message } from 'lib/api/message';
@@ -109,6 +110,11 @@ const Messenger = () => {
         e.preventDefault();
         sendMessage();
     };
+    if (session.status !== 'authenticated') {
+        return (
+            <Preloader />
+        );
+    }
 
     return (
         <main className="messenger">
