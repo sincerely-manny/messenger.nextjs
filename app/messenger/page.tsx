@@ -1,6 +1,6 @@
 'use client';
 
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError } from 'axios';
 import ChatListItem from 'components/ChatListItem';
 import ChatMessage from 'components/ChatMessage';
 import HeaderSearchForm from 'components/HeaderSearchForm';
@@ -11,8 +11,7 @@ import { Message } from 'lib/api/message';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import {
-    createRef,
-    FormEvent, KeyboardEvent, useEffect, useMemo, useState,
+    createRef, FormEvent, KeyboardEvent, useEffect, useMemo, useState,
 } from 'react';
 import { FiSend, FiSettings } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,7 +26,7 @@ const Messenger = () => {
     const dispatch = useDispatch();
     const sse = useMemo(() => { // setting connection to SSE endpoint
         dispatch(setConnectedState(connectedState.CONNECTING));
-        const es = new EventSource('/api/messenger/incoming');
+        const es = new EventSource('/api/messenger/incoming', { withCredentials: true });
         es.onopen = () => {
             dispatch(setConnectedState(connectedState.OPEN));
             dispatch(addNotification({ message: 'Connected to SSE gateway' }));
@@ -37,11 +36,8 @@ const Messenger = () => {
             dispatch(addNotification({ message: 'Connection to SSE gateway lost. Reconnecting...' }));
         };
         es.addEventListener('MESSAGE', (r) => {
-            const msg = JSON.parse(r.data as string) as {
-                text: string,
-                id: string,
-                senderId: string,
-            } as Message;
+            const msg = JSON.parse(r.data as string) as Message;
+            dispatch(addNotification({ message: msg.text, title: msg.senderId }));
             dispatch(catchMessage(msg));
         });
         return es;
@@ -52,7 +48,7 @@ const Messenger = () => {
         dispatch(setConnectedState(connectedState.CLOSED));
         dispatch(addNotification({ message: 'Connection to SSE gateway closed' }));
         sse.close();
-    }, [sse, dispatch]);
+    });
 
     const [form, setForm] = useState({
         message: '',
