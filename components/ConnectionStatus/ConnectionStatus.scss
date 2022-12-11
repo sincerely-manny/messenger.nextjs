@@ -1,26 +1,35 @@
 @import 'scss/variables.scss';
+@import 'scss/keyframes.scss';
 
 .connestion-status-widget {
     position: absolute;
-    right: 20px;
     top: 20px;
-    font-weight: 200;
-    vertical-align: middle;
+    right: 20px;
+
     font-size: $p12;
+    font-weight: 200;
     line-height: $p12;
+    vertical-align: middle;
 
     .connected {
         opacity: 0.5;
 
         &::after {
+            content: ' ';
+
             display: inline-block;
+
             width: 0.8em;
             height: 0.8em;
-            border-radius: 1em;
-            content: ' ';
-            background-color: $green;
             margin-left: 0.5em;
+
+            background-color: $green;
+            border-radius: 1em;
         }
+    }
+
+    .connecting {
+        @include dots123;
     }
 
     * {

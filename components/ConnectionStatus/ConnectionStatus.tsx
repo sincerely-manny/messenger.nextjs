@@ -12,7 +12,9 @@ const ConnectionStatus = () => {
     if (connectionStatus === connectedState.CONNECTING) {
         StatusDisplay = (
             <>
-                Connecting...
+                <span className="connecting">
+                    Connecting
+                </span>
                 <Spinner />
             </>
         );
