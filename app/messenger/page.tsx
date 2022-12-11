@@ -3,6 +3,7 @@
 import axios, { AxiosError } from 'axios';
 import ChatListItem from 'components/ChatListItem';
 import ChatMessage from 'components/ChatMessage';
+import ConnectionStatus from 'components/ConnectionStatus';
 import HeaderSearchForm from 'components/HeaderSearchForm';
 import { addNotification } from 'components/PopUpNotifications';
 import Preloader from 'components/Preloader';
@@ -17,7 +18,7 @@ import {
 import { FiSend, FiSettings } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
-import { connectedState, setConnectedState } from './connectedState.slice';
+import { connectedState, setConnectedState } from '../../components/ConnectionStatus/connectedState.slice';
 import { catchMessage } from './messages.slice';
 import './page.scss';
 
@@ -30,15 +31,12 @@ const Messenger = () => {
         const es = new EventSource('/api/messenger/incoming', { withCredentials: true });
         es.onopen = () => {
             dispatch(setConnectedState(connectedState.OPEN));
-            dispatch(addNotification({ message: 'Connected to SSE gateway' }));
         };
         es.onerror = () => {
             dispatch(setConnectedState(connectedState.CONNECTING));
-            dispatch(addNotification({ message: 'Connection to SSE gateway lost. Reconnecting...' }));
         };
         es.addEventListener('MESSAGE', (r) => {
             const msg = JSON.parse(r.data as string) as Message;
-            dispatch(addNotification({ message: msg.text, title: msg.senderId }));
             dispatch(catchMessage(msg));
         });
         return es;
@@ -47,7 +45,6 @@ const Messenger = () => {
     // purely for closing connection on unmounting
     useEffect(() => () => {
         dispatch(setConnectedState(connectedState.CLOSED));
-        dispatch(addNotification({ message: 'Connection to SSE gateway closed' }));
         sse.close();
     }, [dispatch, sse]);
 
@@ -124,7 +121,9 @@ const Messenger = () => {
                 </Link>
                 <HeaderSearchForm />
             </header>
-            <header className="chat-window-header" />
+            <header className="chat-window-header">
+                <ConnectionStatus />
+            </header>
             <aside className="chats-list">
                 <ChatListItem unread="4" />
                 <ChatListItem active />

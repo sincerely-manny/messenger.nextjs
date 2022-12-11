@@ -1,0 +1,33 @@
+@import 'scss/variables.scss';
+
+.connestion-status-widget {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-weight: 200;
+    vertical-align: middle;
+    font-size: $p12;
+    line-height: $p12;
+
+    .connected {
+        opacity: 0.5;
+
+        &::after {
+            display: inline-block;
+            width: 0.8em;
+            height: 0.8em;
+            border-radius: 1em;
+            content: ' ';
+            background-color: $green;
+            margin-left: 0.5em;
+        }
+    }
+
+    * {
+        vertical-align: middle;
+    }
+
+    svg {
+        margin-left: 0.5em;
+    }
+}

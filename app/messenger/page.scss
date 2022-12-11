@@ -37,7 +37,7 @@
 
         box-sizing: border-box;
         width: 100%;
-        padding: 20px;
+        padding: 0 20px;
 
         input,
         textarea,
@@ -92,8 +92,8 @@
 
             // margin-left: -3em;
             position: absolute;
-            right: 2.5em;
-            bottom: 2.45em;
+            right: 30px;
+            bottom: 12px;
 
             color: $white40;
             vertical-align: middle;
@@ -107,8 +107,8 @@
             }
 
             &:disabled {
-                color: $white20;
                 cursor: default;
+                color: $white20;
             }
 
             * {
