@@ -6,6 +6,7 @@ const nextConfig = {
       { loader: '@next/font/google', options: { subsets: ['latin', 'cyrillic'] } },
     ],
   },
+  reactStrictMode: true,
 };
 
 module.exports = nextConfig;
