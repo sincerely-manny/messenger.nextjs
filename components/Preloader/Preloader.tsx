@@ -1,4 +1,4 @@
-import './preloader.scss';
+import './Preloader.scss';
 
 const Preloader = () => (
     <main className="preloader">
