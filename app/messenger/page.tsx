@@ -28,6 +28,11 @@ const Messenger = () => {
     const dispatch = useDispatch();
     const sse = useMemo(() => { // setting connection to SSE endpoint
         dispatch(setConnectedState(connectedState.CONNECTING));
+        if (typeof EventSource === 'undefined') { // Next tries to render this serverside and fails on build
+            return {
+                close: ():undefined => undefined,
+            };
+        }
         const es = new EventSource('/api/messenger/incoming', { withCredentials: true });
         es.onopen = () => {
             dispatch(setConnectedState(connectedState.OPEN));
