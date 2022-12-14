@@ -18,8 +18,6 @@ class Incoming extends Rest {
 
         sse.connect(clientId, this.response, this.request.headers);
 
-        console.log('connected', clientId);
-
         sse.send({
             message: {
                 text: 'HELLOOOOO!!!',
@@ -43,7 +41,6 @@ class Incoming extends Rest {
         }, 5000);
 
         this.response.on('close', () => {
-            console.log('disconnected', clientId);
             sse.disconnect(clientId);
         });
     };

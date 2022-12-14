@@ -17,8 +17,7 @@ export enum ServerSentEventType {
     PING,
 }
 
-// TODO: Returns the right instance of class only after page refresh (second connection). WTF????
-// Caching?!?!?!
+// Only works correctly in prod mode
 class ServerSentEvents {
     private static instance: ServerSentEvents;
 
@@ -66,14 +65,9 @@ class ServerSentEvents {
         const { message, type, clientId } = data;
         const client = this.clients.get(clientId);
 
-        console.log(this.id, this.clients.keys());
-
         if (client === undefined || !client.size) {
-            console.log('Client is not connected');
             return false;
         }
-
-        console.log(clientId, client.keys());
 
         const stream = [
             `event: ${ServerSentEventType[type]}`,
