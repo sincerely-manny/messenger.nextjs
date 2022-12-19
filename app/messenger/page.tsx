@@ -10,6 +10,7 @@ import Preloader from 'components/Preloader';
 import withSessionProvider from 'components/withSessionProvider';
 import withStoreProvider from 'components/withStoreProvider';
 import { Message } from 'lib/api/message';
+import { throttle } from 'lodash';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import {
@@ -112,7 +113,49 @@ const Messenger = () => {
         e.preventDefault();
         sendMessage();
     };
-    if (session.status !== 'authenticated') {
+
+    const loader = () => {
+        console.log("🚀 ~ file: page.tsx:124 ~ loader ~ 'Load!'", 'Load!');
+    };
+
+    const chatContainer = createRef<HTMLDivElement>();
+
+    useEffect(() => {
+        if (!chatContainer.current) {
+            return;
+        }
+        const elem = chatContainer.current;
+
+        const checkIfScrolledToBottom = () => {
+            const { scrollTop, scrollHeight, clientHeight } = elem;
+            return scrollHeight - clientHeight - scrollTop < 50;
+        };
+
+        const scroolToBottom = () => {
+            elem.scrollTo({
+                top: elem.scrollHeight,
+                behavior: 'smooth',
+            });
+        };
+
+
+        let wasScrolledToBottom = checkIfScrolledToBottom();
+
+        elem.addEventListener('scroll', throttle(() => {
+            wasScrolledToBottom = checkIfScrolledToBottom();
+            console.log('🚀 ~ file: page.tsx:138 ~ elem.addEventListener ~ wasScrolledToBottom', wasScrolledToBottom);
+        }, 500));
+
+        elem.addEventListener('DOMNodeInserted', () => {
+            if (wasScrolledToBottom) {
+                scroolToBottom();
+            }
+        });
+
+        scroolToBottom();
+    }, [chatContainer]);
+
+    if (session.status !== 'authenticated') { // Preload while fetching session data
         return (
             <Preloader />
         );
@@ -135,7 +178,7 @@ const Messenger = () => {
                 <ChatListItem />
             </aside>
             <section className="chat-window">
-                <div className="chat-messages-container">
+                <div className="chat-messages-container" ref={chatContainer}>
                     {messages[0].map(({ text, id, senderId }) => (
                         <ChatMessage fromSelf={(senderId === session.data?.user.id)} key={id}>
                             {text}

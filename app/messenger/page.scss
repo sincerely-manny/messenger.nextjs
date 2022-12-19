@@ -57,11 +57,16 @@
     .chat-messages-container {
         position: relative;
 
-        overflow: scroll;
+        overflow-x: hidden;
+        overflow-y: scroll;
 
         box-sizing: border-box;
         height: 100%;
         padding: 65px 0 3em;
+
+        scrollbar-gutter: stable;
+        scrollbar-color: #6969dd #e0e0e0;
+        scrollbar-width: thin;
     }
 
     .new-message-form {
