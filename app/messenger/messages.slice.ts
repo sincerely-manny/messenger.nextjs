@@ -38,6 +38,96 @@ export const initialState: Messages = {
             text: 'Loose shallow white helpful powerful able raincoat.',
             senderId: nanoid(),
         },
+        {
+            id: nanoid(),
+            text: 'Shy pitiful gorgeous adorable crooked shrilling lemon icy umbrella.',
+            senderId: nanoid(),
+        },
+        {
+            id: nanoid(),
+            text: 'Vast flat millions white magnificent yellow harsh bland eye.',
+            senderId: nanoid(),
+        },
+        {
+            id: nanoid(),
+            text: 'Straight noisy huge arrogant loud itchy abiding apple.',
+            senderId: nanoid(),
+        },
+        {
+            id: nanoid(),
+            text: 'Little shaggy careful cold millions slow delicious wailing cold dog.',
+            senderId: nanoid(),
+        },
+        {
+            id: nanoid(),
+            text: 'Square melodic disgusting boring flat melodic sharp boy. ',
+            senderId: nanoid(),
+        },
+        {
+            id: nanoid(),
+            text: 'Loose shallow white helpful powerful able raincoat.',
+            senderId: nanoid(),
+        },
+        {
+            id: nanoid(),
+            text: 'Shy pitiful gorgeous adorable crooked shrilling lemon icy umbrella.',
+            senderId: nanoid(),
+        },
+        {
+            id: nanoid(),
+            text: 'Vast flat millions white magnificent yellow harsh bland eye.',
+            senderId: nanoid(),
+        },
+        {
+            id: nanoid(),
+            text: 'Straight noisy huge arrogant loud itchy abiding apple.',
+            senderId: nanoid(),
+        },
+        {
+            id: nanoid(),
+            text: 'Little shaggy careful cold millions slow delicious wailing cold dog.',
+            senderId: nanoid(),
+        },
+        {
+            id: nanoid(),
+            text: 'Square melodic disgusting boring flat melodic sharp boy. ',
+            senderId: nanoid(),
+        },
+        {
+            id: nanoid(),
+            text: 'Loose shallow white helpful powerful able raincoat.',
+            senderId: nanoid(),
+        },
+        {
+            id: nanoid(),
+            text: 'Shy pitiful gorgeous adorable crooked shrilling lemon icy umbrella.',
+            senderId: nanoid(),
+        },
+        {
+            id: nanoid(),
+            text: 'Vast flat millions white magnificent yellow harsh bland eye.',
+            senderId: nanoid(),
+        },
+        {
+            id: nanoid(),
+            text: 'Straight noisy huge arrogant loud itchy abiding apple.',
+            senderId: nanoid(),
+        },
+        {
+            id: nanoid(),
+            text: 'Little shaggy careful cold millions slow delicious wailing cold dog.',
+            senderId: nanoid(),
+        },
+        {
+            id: nanoid(),
+            text: 'Square melodic disgusting boring flat melodic sharp boy. ',
+            senderId: nanoid(),
+        },
+        {
+            id: nanoid(),
+            text: 'Loose shallow white helpful powerful able raincoat.',
+            senderId: nanoid(),
+        },
     ],
 };
 

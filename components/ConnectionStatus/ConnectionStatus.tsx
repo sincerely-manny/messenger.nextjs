@@ -20,10 +20,10 @@ const ConnectionStatus = () => {
         );
     } else if (connectionStatus === connectedState.CLOSED) {
         StatusDisplay = (
-            <>
+            <span className="disconnected">
                 Disconnected
                 <VscDebugDisconnect />
-            </>
+            </span>
         );
     } else {
         StatusDisplay = (

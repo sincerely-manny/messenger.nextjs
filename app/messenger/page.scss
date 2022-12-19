@@ -25,10 +25,44 @@
     }
 }
 
+.chat-window-header {
+    position: relative;
+    z-index: 1;
+
+    grid-column: 2 / 2;
+    grid-row: 1 / 1;
+
+    backdrop-filter: blur(5px);
+
+    mask:
+        linear-gradient(
+            to bottom,
+            rgb(0 0 0 / 100%) 0%,
+            rgb(0 0 0 / 100%) 50%,
+            rgb(0 0 0 / 0%) 100%
+        );
+}
+
 .chat-window {
     position: relative;
+
+    overflow: hidden;
+    grid-column: 2 / 2;
+    grid-row: 1 / -1;
+
     box-sizing: border-box;
+    height: 100%;
     padding: 0 20px;
+
+    .chat-messages-container {
+        position: relative;
+
+        overflow: scroll;
+
+        box-sizing: border-box;
+        height: 100%;
+        padding: 65px 0 3em;
+    }
 
     .new-message-form {
         position: absolute;
@@ -120,4 +154,5 @@
 
 .chats-list {
     display: block;
+    grid-row-start: 2;
 }

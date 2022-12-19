@@ -32,6 +32,13 @@
         @include dots123;
     }
 
+    .connecting,
+    .connected,
+    .disconnected {
+        display: inline-block;
+        animation: backInRight 1s;
+    }
+
     * {
         vertical-align: middle;
     }

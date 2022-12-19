@@ -135,11 +135,13 @@ const Messenger = () => {
                 <ChatListItem />
             </aside>
             <section className="chat-window">
-                {messages[0].map(({ text, id, senderId }) => (
-                    <ChatMessage fromSelf={(senderId === session.data?.user.id)} key={id}>
-                        {text}
-                    </ChatMessage>
-                ))}
+                <div className="chat-messages-container">
+                    {messages[0].map(({ text, id, senderId }) => (
+                        <ChatMessage fromSelf={(senderId === session.data?.user.id)} key={id}>
+                            {text}
+                        </ChatMessage>
+                    ))}
+                </div>
                 <div className="new-message-form">
                     <form action="./" method="post" onSubmit={formSubmitHandler}>
                         <textarea
