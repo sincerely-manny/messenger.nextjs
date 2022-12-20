@@ -138,7 +138,6 @@ const Messenger = () => {
             });
         };
 
-
         let wasScrolledToBottom = checkIfScrolledToBottom();
 
         elem.addEventListener('scroll', throttle(() => {
