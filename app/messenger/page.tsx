@@ -117,15 +117,16 @@ const Messenger = () => {
 
     const chatContainer = createRef<HTMLDivElement>();
     const chatContainerScrollHeight = useRef<number>();
+    const chatContainerScrollTop = useRef<number>();
+    const chatContainerIsLoading = useRef<boolean>();
 
     useEffect(() => {
         if (!chatContainer.current) {
             return () => {};
         }
         const elem = chatContainer.current;
-        let isLoading = false;
         const loader = () => {
-            isLoading = true;
+            chatContainerIsLoading.current = true;
             if (chatContainerScrollHeight.current === undefined) {
                 chatContainerScrollHeight.current = elem.scrollHeight;
             }
@@ -145,13 +146,13 @@ const Messenger = () => {
                 });
             }
             chatContainerScrollHeight.current = elem.scrollHeight;
-            isLoading = false;
+            chatContainerIsLoading.current = false;
         };
 
-        const scrollToBottom = () => {
+        const scrollToBottom = (instant = false) => {
             elem.scrollTo({
                 top: elem.scrollHeight,
-                behavior: 'smooth',
+                behavior: instant ? 'auto' : 'smooth',
             });
         };
 
@@ -167,7 +168,7 @@ const Messenger = () => {
         const scrollCb = throttle(() => {
             wasScrolledToEnd = checkIfIsScrolledToEnd();
 
-            if (elem.scrollTop <= 200 && !isLoading) {
+            if (elem.scrollTop <= 200 && !chatContainerIsLoading.current) {
                 loader();
             }
         }, 500);
@@ -178,13 +179,20 @@ const Messenger = () => {
         //     if (wasScrolledToEnd === true) {
         //         scrollToBottom();
         //     }
-        // });
+        // }); // works w/o event  listner for now
 
         if (wasScrolledToEnd === true) {
             scrollToBottom();
         }
 
+        if (chatContainerScrollTop.current === undefined) { // scroll to botton on 1st load
+            scrollToBottom(true);
+            chatContainerScrollTop.current = elem.scrollTop;
+            chatContainerScrollHeight.current = elem.scrollHeight;
+        }
+
         return () => {
+            chatContainerIsLoading.current = false;
             elem.removeEventListener('scroll', scrollCb);
         };
     }, [chatContainer, dispatch]);
