@@ -138,15 +138,19 @@ export const messagesSlice = createSlice({
         setMessages: (state, action: PayloadAction<Messages>) => {
             state = action.payload;
         },
-        catchMessage: (state, action: PayloadAction<Message>) => {
+        appendMessage: (state, action: PayloadAction<Message>) => {
             state[0].push(action.payload);
+        },
+        prependMessages: (state, action: PayloadAction<Message[]>) => {
+            state[0].unshift(...action.payload);
         },
     },
 });
 
 export const {
     setMessages,
-    catchMessage,
+    appendMessage,
+    prependMessages,
 } = messagesSlice.actions;
 
 export default messagesSlice.reducer;
