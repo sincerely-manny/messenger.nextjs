@@ -8,6 +8,7 @@ import ConnectionStatus from 'components/ConnectionStatus';
 import HeaderSearchForm from 'components/HeaderSearchForm';
 import { addNotification } from 'components/PopUpNotifications';
 import Preloader from 'components/Preloader';
+import Spinner from 'components/Spinner';
 import withSessionProvider from 'components/withSessionProvider';
 import withStoreProvider from 'components/withStoreProvider';
 import { Message } from 'lib/api/message';
@@ -125,7 +126,7 @@ const Messenger = () => {
             return () => {};
         }
         const elem = chatContainer.current;
-        const loader = () => {
+        const loader = () => { // older messages loader
             chatContainerIsLoading.current = true;
             if (chatContainerScrollHeight.current === undefined) {
                 chatContainerScrollHeight.current = elem.scrollHeight;
@@ -146,7 +147,7 @@ const Messenger = () => {
                 });
             }
             chatContainerScrollHeight.current = elem.scrollHeight;
-            chatContainerIsLoading.current = false;
+            chatContainerIsLoading.current = false; // TODO: pay attention to preloader behaviour
         };
 
         const scrollToBottom = (instant = false) => {
@@ -221,6 +222,11 @@ const Messenger = () => {
             </aside>
             <section className="chat-window">
                 <div className="chat-messages-container" ref={chatContainer}>
+                    {chatContainerIsLoading.current && (
+                        <div className={`spinner ${chatContainerIsLoading.current ? 'active' : 'hidden'}`}>
+                            <Spinner size={70} />
+                        </div>
+                    )}
                     {messages[0].map(({ text, id, senderId }) => (
                         <ChatMessage fromSelf={(senderId === session.data?.user.id)} key={id}>
                             {text}

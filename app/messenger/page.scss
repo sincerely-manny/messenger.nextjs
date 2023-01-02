@@ -26,6 +26,8 @@
 }
 
 .chat-window-header {
+    pointer-events: none;
+
     position: relative;
     z-index: 1;
 
@@ -67,6 +69,22 @@
         box-sizing: border-box;
         height: 100%;
         padding: 65px 0 3em;
+
+        .spinner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            text-align: center;
+            width: 100%;
+
+            &.active {
+                animation: slideInDown 0.2s;
+            }
+
+            &.hidden {
+                animation: slideOutUp 0.2s;
+            }
+        }
     }
 
     .new-message-form {
