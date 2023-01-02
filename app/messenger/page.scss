@@ -74,8 +74,10 @@
             position: absolute;
             top: 0;
             left: 0;
-            text-align: center;
+
             width: 100%;
+
+            text-align: center;
 
             &.active {
                 animation: slideInDown 0.2s;
