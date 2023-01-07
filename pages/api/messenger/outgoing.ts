@@ -1,10 +1,9 @@
-import { nanoid } from '@reduxjs/toolkit';
 import { ApiResponse, StatusCode } from 'lib/api/general';
 import { Message } from 'lib/api/message';
 import Rest from 'lib/api/rest';
 import ServerSentEvents, { ServerSentEventType } from 'lib/sse/serverSentEvents';
 
-class Outgoing extends Rest<{ message: string }, ApiResponse> {
+class Outgoing extends Rest<Message, ApiResponse> {
     post = async () => {
         const session = await this.checkSession();
         if (!session) {
@@ -15,12 +14,14 @@ class Outgoing extends Rest<{ message: string }, ApiResponse> {
 
         const clientId = session.user.id;
 
+        const message = {
+            ...this.request.body,
+            senderId: clientId,
+            timestamp: Date.now().toString(),
+        };
+
         sse.send({
-            message: {
-                text: this.request.body.message,
-                id: nanoid(),
-                senderId: clientId,
-            } as Message,
+            message,
             type: ServerSentEventType.MESSAGE,
             clientId,
         });

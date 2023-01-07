@@ -22,13 +22,14 @@ import { FiSend, FiSettings } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { connectedState, setConnectedState } from '../../components/ConnectionStatus/connectedState.slice';
-import { appendMessage, prependMessages } from './messages.slice';
+import { appendMessage, prependMessages, updateOrAppendMessage } from './messages.slice';
 import './page.scss';
 
 const Messenger = () => {
     const session = useSession({ required: true });
     const messages = useSelector((state: RootState) => state.messages);
     const dispatch = useDispatch();
+
     const sse = useMemo(() => { // setting connection to SSE endpoint
         dispatch(setConnectedState(connectedState.CONNECTING));
         if (typeof EventSource === 'undefined') { // Next tries to render this serverside and fails on build
@@ -45,7 +46,10 @@ const Messenger = () => {
         };
         es.addEventListener('MESSAGE', (r) => {
             const msg = JSON.parse(r.data as string) as Message;
-            dispatch(appendMessage(msg));
+            dispatch(updateOrAppendMessage({
+                message: msg,
+                chatId: 0,
+            }));
         });
         return es;
     }, [dispatch]);
@@ -58,19 +62,28 @@ const Messenger = () => {
 
     const [form, setForm] = useState({
         message: '',
-        disabled: true,
+        disabled: false,
     });
 
     const textarea = createRef<HTMLTextAreaElement>();
 
     const sendMessage = () => {
-        axios.post('/api/messenger/outgoing', form)
-            .then(() => {
-                setForm({
-                    message: '',
-                    disabled: true,
-                });
-            })
+        const clientsideMessageId = nanoid();
+        dispatch(appendMessage({ // optimisticly sending message
+            id: clientsideMessageId,
+            text: form.message,
+            senderId: session.data?.user.id || '0',
+        }));
+        setForm({
+            message: '',
+            disabled: false,
+        });
+        axios.post('/api/messenger/outgoing', {
+            id: clientsideMessageId,
+            text: form.message,
+            senderId: session.data?.user || '0',
+        } as Message)
+            .then(() => {})
             .catch((err: AxiosError) => {
                 dispatch(addNotification({
                     message: err.message,
@@ -139,7 +152,7 @@ const Messenger = () => {
                     senderId: nanoid(),
                 });
             }
-            dispatch(prependMessages(newMessages));
+            dispatch(prependMessages({ messages: newMessages, chatId: 0 }));
             if (elem.scrollTop === 0) { // TODO: Refactor onload-scroll behaviour
                 elem.scrollTo({
                     top: elem.scrollHeight - chatContainerScrollHeight.current,
@@ -227,8 +240,14 @@ const Messenger = () => {
                             <Spinner size={70} />
                         </div>
                     )}
-                    {messages[0].map(({ text, id, senderId }) => (
-                        <ChatMessage fromSelf={(senderId === session.data?.user.id)} key={id}>
+                    {messages[0].map(({
+                        text, id, senderId, timestamp,
+                    }) => (
+                        <ChatMessage
+                            fromSelf={(senderId === session.data?.user.id)}
+                            key={id}
+                            timestamp={timestamp}
+                        >
                             {text}
                         </ChatMessage>
                     ))}

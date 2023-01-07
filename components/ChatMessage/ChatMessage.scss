@@ -16,6 +16,8 @@
         box-sizing: border-box;
         padding: 5px 12px;
 
+        white-space: pre-line;
+
         background: linear-gradient(90deg, $grad-blue2 0%, $grad-blue1 100%);
         border-radius: 20px;
     }
