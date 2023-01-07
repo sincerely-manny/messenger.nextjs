@@ -4,6 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import NextAuth, { CallbacksOptions } from 'next-auth';
 // import CredentialsProvider from 'next-auth/providers/credentials';
 import GitHubProvider from 'next-auth/providers/github';
+import GoogleProvider from 'next-auth/providers/google';
 
 const prisma = new PrismaClient();
 
@@ -20,7 +21,7 @@ const callbacks: Partial<CallbacksOptions> = {
 
 export const authOptions = {
     adapter: PrismaAdapter(prisma),
-    debug: true,
+    debug: false,
     session: {
         maxAge: 30 * 24 * 60 * 60, // 30 days
         updateAge: 24 * 60 * 60, // 24 hours
@@ -67,6 +68,10 @@ export const authOptions = {
         GitHubProvider({
             clientId: process.env.GITHUB_ID || '',
             clientSecret: process.env.GITHUB_SECRET || '',
+        }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID || '',
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
         }),
     ],
     callbacks,

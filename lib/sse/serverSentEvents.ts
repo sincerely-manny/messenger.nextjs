@@ -15,6 +15,7 @@ export enum ServerSentEventType {
     MESSAGE,
     TYPING,
     PING,
+    HANDSHAKE,
 }
 
 // Only works correctly in prod mode

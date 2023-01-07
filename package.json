@@ -6,10 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint:es": "npx eslint .",
-    "fix:es": "npx eslint . --fix",
     "lint:ts": "tsc --noEmit",
+    "lint:es": "npx eslint .",
     "lint:style": "npx stylelint **/*.scss",
+    "fix:es": "npx eslint . --fix",
     "fix:style": "npx stylelint **/*.scss --fix",
     "prisma:migrate": "npx prisma migrate dev --name init",
     "prisma:generate": "npx prisma generate"
@@ -34,6 +34,7 @@
     "react-dom": "18.2.0",
     "react-icons": "4.7.1",
     "react-redux": "8.0.5",
+    "sharp": "0.31.3",
     "typescript": "4.9.4",
     "yup": "0.32.11"
   },

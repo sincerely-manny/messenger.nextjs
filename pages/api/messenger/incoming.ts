@@ -1,5 +1,3 @@
-import { nanoid } from '@reduxjs/toolkit';
-import { Message } from 'lib/api/message';
 import Rest from 'lib/api/rest';
 import ServerSentEvents, { ServerSentEventType } from 'lib/sse/serverSentEvents';
 
@@ -19,26 +17,10 @@ class Incoming extends Rest {
         sse.connect(clientId, this.response, this.request.headers);
 
         sse.send({
-            message: {
-                text: 'HELLOOOOO!!!',
-                id: nanoid(),
-                senderId: clientId,
-            } as Message,
-            type: ServerSentEventType.MESSAGE,
+            message: 'connected',
+            type: ServerSentEventType.HANDSHAKE,
             clientId,
         });
-
-        setTimeout(() => {
-            sse.send({
-                message: {
-                    text: 'HELLOOOOO 5 sec later!!!',
-                    id: nanoid(),
-                    senderId: clientId,
-                } as Message,
-                type: ServerSentEventType.MESSAGE,
-                clientId,
-            });
-        }, 5000);
 
         this.response.on('close', () => {
             sse.disconnect(clientId);

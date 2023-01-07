@@ -196,7 +196,7 @@ const Messenger = () => {
         // }); // works w/o event  listner for now
 
         if (wasScrolledToEnd === true) {
-            scrollToBottom();
+            scrollToBottom(); // TODO: not scrolling on multi-line messages??
         }
 
         if (chatContainerScrollTop.current === undefined) { // scroll to botton on 1st load
