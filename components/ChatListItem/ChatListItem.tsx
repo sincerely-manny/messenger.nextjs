@@ -5,32 +5,33 @@ import './ChatListItem.scss';
 type ChatListItemProps = {
     active?: boolean,
     unread?: string,
+    chatData: {
+        image: string,
+        title: string,
+        preview: string,
+        lastMessageAt: number,
+    },
 };
 
-const ChatListItem = ({ active = false, unread = '' }: ChatListItemProps) => (
+const ChatListItem = ({ active = false, unread = '', chatData }: ChatListItemProps) => (
     <Link className={`chat-list-item ${active ? 'chat-list-item-active' : ''}`} href="/messenger/25">
         <div className="chat-list-image-container">
             <Image
-                src="/avatars/av16.jpg"
+                src={chatData.image}
                 width={100}
                 height={100}
-                alt="av16"
+                alt={chatData.title}
                 quality={100}
             />
         </div>
         <div className="chat-list-last-message">
-            <p className="chat-list-name">Tamanna Elliott</p>
-            <p className="chat-list-message-preview">
-                Fish every, the divided face also,
-                light that there light heaven him
-                hath above above midst also earth green.
-                Called.
-            </p>
+            <p className="chat-list-name">{chatData.title}</p>
+            <p className="chat-list-message-preview">{chatData.preview}</p>
         </div>
         <div className="chat-list-info">
             <div className="unread-counter">{unread}</div>
             <time>
-                22:34
+                {chatData.lastMessageAt}
             </time>
         </div>
     </Link>
