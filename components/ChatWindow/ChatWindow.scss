@@ -1,0 +1,46 @@
+@import 'scss/variables.scss';
+
+.chat-window {
+    position: relative;
+
+    overflow: hidden;
+    grid-column: 2 / 2;
+    grid-row: 1 / -1;
+
+    box-sizing: border-box;
+    height: 100%;
+    padding: 0 20px;
+
+    .chat-messages-container {
+        scrollbar-color: #6969dd #e0e0e0;
+        scrollbar-width: thin;
+        scrollbar-gutter: stable;
+
+        position: relative;
+
+        overflow-x: hidden;
+        overflow-y: scroll;
+
+        box-sizing: border-box;
+        height: 100%;
+        padding: 65px 0 3em;
+
+        .spinner {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+
+            text-align: center;
+
+            &.active {
+                animation: slideInDown 0.2s;
+            }
+
+            &.hidden {
+                animation: slideOutUp 0.2s;
+            }
+        }
+    }
+}

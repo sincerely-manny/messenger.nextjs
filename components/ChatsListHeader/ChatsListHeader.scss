@@ -1,0 +1,18 @@
+.chat-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+    padding: 0 4px 0 17px;
+
+    .settings-icon {
+        opacity: 0.3;
+        transition: opacity 0.3s;
+
+        &:hover,
+        &:active {
+            opacity: 1;
+        }
+    }
+}
