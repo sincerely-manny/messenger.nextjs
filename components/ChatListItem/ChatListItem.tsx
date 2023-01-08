@@ -38,7 +38,7 @@ const ChatListItem = ({ active = false, unread = '', chatData }: ChatListItemPro
         image = chatData.users.find((e) => e.id !== session.data?.user.id)?.image || null;
     }
 
-    const avatar = image && false ? (
+    const avatar = image ? (
         <Image
             src={image}
             width={100}
