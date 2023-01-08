@@ -1,7 +1,7 @@
 import { ApiResponse, StatusCode } from 'lib/api/general';
 import { Message } from 'lib/api/message';
 import Rest from 'lib/api/rest';
-import ServerSentEvents, { ServerSentEventType } from 'lib/sse/serverSentEvents';
+import ServerSentEvents, { ServerSentEvent } from 'lib/sse/serverSentEvents';
 
 class Outgoing extends Rest<Message, ApiResponse> {
     post = async () => {
@@ -22,7 +22,7 @@ class Outgoing extends Rest<Message, ApiResponse> {
 
         sse.send({
             message,
-            type: ServerSentEventType.MESSAGE,
+            type: ServerSentEvent.MESSAGE,
             clientId,
         });
 

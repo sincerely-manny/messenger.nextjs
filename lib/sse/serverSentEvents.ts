@@ -11,7 +11,7 @@ type Clients = Map<string, ActiveConnections>;
 
 export type ServerSentMessage = Record<string, unknown> | string;
 
-export enum ServerSentEventType {
+export enum ServerSentEvent {
     MESSAGE,
     TYPING,
     PING,
@@ -59,7 +59,7 @@ class ServerSentEvents {
     public send = (
         data: {
             message: ServerSentMessage,
-            type: ServerSentEventType,
+            type: ServerSentEvent,
             clientId: string,
         },
     ) => {
@@ -71,7 +71,7 @@ class ServerSentEvents {
         }
 
         const stream = [
-            `event: ${ServerSentEventType[type]}`,
+            `event: ${ServerSentEvent[type]}`,
             `data: ${JSON.stringify(message)}`,
             `id: ${nanoid()}`,
             'retry: 10000',
