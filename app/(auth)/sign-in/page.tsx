@@ -1,12 +1,11 @@
 'use client';
 
+import OAuthIcons from 'components/OAuthIcons';
 import { addNotification } from 'components/PopUpNotifications';
 import { StyledForm, StyledFormTypes } from 'components/StyledForm';
 import withStoreProvider from 'components/withStoreProvider';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import { MouseEvent } from 'react';
-import { BsGithub } from 'react-icons/bs';
 import { useDispatch } from 'react-redux';
 import fonts from 'scss/fonts';
 import * as Yup from 'yup';
@@ -44,17 +43,7 @@ const SignIn = () => {
             }));
         });
     };
-    const clickHandlerGithub = (ev: MouseEvent) => {
-        ev.preventDefault();
-        (async () => {
-            await signIn('github', { callbackUrl: '/messenger' });
-        })().catch((e: Error) => {
-            dispatch(addNotification({
-                type: 'error',
-                message: e.message || 'Error sending data',
-            }));
-        });
-    };
+
     return (
         <>
             <h1 className={`form-title ${fonts.lora.className}`}>Sign In</h1>
@@ -68,9 +57,7 @@ const SignIn = () => {
                     { type: 'submit', name: 'submit', label: 'Sign in' },
                 ]}
             />
-            <Link href="/sign-in" title="Sign-in with GitHub" className="oauth-icon" onClick={clickHandlerGithub}>
-                <BsGithub size="3em" />
-            </Link>
+            <OAuthIcons />
             <p className="diff-auth-option-link">
                 Don&apos;t have an account?&nbsp;
                 <Link href="/sign-up">

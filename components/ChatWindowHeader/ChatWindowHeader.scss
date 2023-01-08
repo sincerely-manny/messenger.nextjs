@@ -1,0 +1,19 @@
+.chat-window-header {
+    pointer-events: none;
+
+    position: relative;
+    z-index: 1;
+
+    grid-column: 2 / 2;
+    grid-row: 1 / 1;
+
+    backdrop-filter: blur(5px);
+
+    mask:
+        linear-gradient(
+            to bottom,
+            rgb(0 0 0 / 100%) 0%,
+            rgb(0 0 0 / 100%) 50%,
+            rgb(0 0 0 / 0%) 100%
+        );
+}

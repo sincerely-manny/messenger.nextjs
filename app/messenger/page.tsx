@@ -1,49 +1,68 @@
-import Link from 'next/link';
-import { FiSettings } from 'react-icons/fi';
-import ChatListItem from 'components/ChatListItem';
-import ChatMessage from 'components/ChatMessage';
-import HeaderSearchForm from 'components/HeaderSearchForm';
+'use client';
+
+import ChatsList from 'components/ChatsList';
+import ChatsListHeader from 'components/ChatsListHeader';
+import ChatWindow from 'components/ChatWindow';
+import ChatWindowHeader from 'components/ChatWindowHeader';
+import Preloader from 'components/Preloader';
+import withSessionProvider from 'components/withSessionProvider';
+import withStoreProvider from 'components/withStoreProvider';
+import { Message } from 'lib/api/message';
+import { useSession } from 'next-auth/react';
+import { useEffect, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
+import { connectedState, setConnectedState } from '../../components/ConnectionStatus/connectedState.slice';
+import { updateOrAppendMessage } from './messages.slice';
 import './page.scss';
 
-const Messenger = () => (
-    <main className="messenger">
-        <header className="chat-list-header">
-            <Link href="/settings" className="settings-icon">
-                <FiSettings strokeWidth="0.5" size="40px" />
-            </Link>
-            <HeaderSearchForm />
-        </header>
-        <header className="chat-window-header" />
-        <aside className="chats-list">
-            <ChatListItem unread="4" />
-            <ChatListItem active />
-            <ChatListItem />
-        </aside>
-        <section className="chat-window">
-            <ChatMessage>
-                Fish every, the divided face also, light that there light heaven him
-                hath above above midst also earth green. Called.
-                Saying had. You&apos;ll she&apos;d image dry grass may male.
-                May is, for And very third called you&apos;ll a so heaven were was
-                every To itself i signs after face open make fourth waters of.
-                Blessed Own that. Stars. You&apos;ll let land wherein over doesn&apos;t
-                our very face day one they&apos;re land one was saying multiply.
-                Us were set, day from. In. Which spirit void.
-                Form gathered given is fly abundantly living air seas creepeth god.
-                Us great multiply beast herb.
-            </ChatMessage>
-            <ChatMessage fromSelf>
-                Fish every, the divided face also, light that there light
-                heaven him hath above above midst also earth green. Called.
-            </ChatMessage>
-            <ChatMessage fromSelf>
-                Fish every, the divided face also.
-            </ChatMessage>
-            <ChatMessage>
-                Fish every, the divided face also.
-            </ChatMessage>
-        </section>
-    </main>
-);
+const Messenger = () => {
+    const session = useSession({ required: true });
+    const dispatch = useDispatch();
 
-export default Messenger;
+    const sse = useMemo(() => { // setting connection to SSE endpoint
+        dispatch(setConnectedState(connectedState.CONNECTING));
+        if (typeof EventSource === 'undefined') { // Next tries to render this serverside and fails on build
+            return {
+                close: ():undefined => undefined,
+            };
+        }
+        const es = new EventSource('/api/messenger/incoming', { withCredentials: true });
+        es.onopen = () => {
+            dispatch(setConnectedState(connectedState.OPEN));
+        };
+        es.onerror = () => {
+            dispatch(setConnectedState(connectedState.CONNECTING));
+        };
+        es.addEventListener('MESSAGE', (r) => {
+            const msg = JSON.parse(r.data as string) as Message;
+            dispatch(updateOrAppendMessage({
+                message: msg,
+                chatId: 0,
+            }));
+        });
+        return es;
+    }, [dispatch]);
+
+    // purely for closing connection on unmounting
+    useEffect(() => () => {
+        dispatch(setConnectedState(connectedState.CLOSED));
+        sse.close();
+    }, [dispatch, sse]);
+
+    if (session.status !== 'authenticated') { // Preload while fetching session data
+        return (
+            <Preloader />
+        );
+    }
+
+    return (
+        <>
+            <ChatsListHeader />
+            <ChatWindowHeader />
+            <ChatsList />
+            <ChatWindow />
+        </>
+    );
+};
+
+export default withStoreProvider(withSessionProvider(Messenger));

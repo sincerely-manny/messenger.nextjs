@@ -1,7 +1,7 @@
 @import 'scss/variables.scss';
 @import 'scss/keyframes.scss';
 
-.entry-point-loading {
+.preloader {
     @include gradient-glow;
 
     display: flex;

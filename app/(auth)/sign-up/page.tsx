@@ -1,10 +1,11 @@
 'use client';
 
-import { SignUpInputs, SignUpResponse, SignUpSchema } from 'lib/api/signup';
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import OAuthIcons from 'components/OAuthIcons';
 import { addNotification } from 'components/PopUpNotifications/slice';
 import { StyledForm, StyledFormTypes } from 'components/StyledForm';
 import withStoreProvider from 'components/withStoreProvider';
+import { SignUpInputs, SignUpResponse, SignUpSchema } from 'lib/api/signup';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import fonts from 'scss/fonts';
@@ -60,6 +61,7 @@ const SignUp = () => {
                     { type: 'submit', name: 'submit', label: 'Sign up' },
                 ]}
             />
+            <OAuthIcons />
             <p className="diff-auth-option-link">
                 Already have an account?&nbsp;
                 <Link href="/sign-in">

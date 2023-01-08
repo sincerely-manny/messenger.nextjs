@@ -3,18 +3,6 @@
         background-position: 0% 0%;
     }
 
-    // 20% {
-    //     background-position: 100% 100%;
-    // }
-
-    // 40% {
-    //     background-position: 100% 0%;
-    // }
-
-    // 80% {
-    //     background-position: 100% 100%;
-    // }
-
     100% {
         background-position: 100% 100%;
     }
@@ -32,5 +20,35 @@
 
     to {
         transform: translateX(100%);
+    }
+}
+@keyframes dots123 {
+    0% {
+        content: ' ';
+    }
+
+    25% {
+        content: '.';
+    }
+
+    50% {
+        content: '..';
+    }
+
+    75% {
+        content: '...';
+    }
+
+    100% {
+        content: ' ';
+    }
+}
+
+@mixin dots123 {
+    &::after {
+        content: ' ';
+        display: inline-block;
+        width: 0.75em;
+        animation: dots123 3s linear infinite;
     }
 }

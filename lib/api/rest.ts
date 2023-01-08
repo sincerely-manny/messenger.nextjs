@@ -1,4 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { unstable_getServerSession } from 'next-auth';
+import { authOptions } from 'pages/api/auth/[...nextauth]';
 import { ApiResponse, ApiResponseError, StatusCode } from './general';
 
 type Q = Partial<{ [key: string]: string | string[]; }>;
@@ -26,6 +28,15 @@ export default abstract class Rest<
         this.request = req;
         this.response = res;
         this.query = req.query;
+        if (this.request.method === 'GET' && this.request.headers.accept === 'text/event-stream') {
+            // this.response.setHeader('Access-Control-Allow-Origin', '*');
+            this.response.setHeader('Connection', 'keep-alive');
+            this.response.setHeader('Content-Type', 'text/event-stream;charset=utf-8');
+            this.response.setHeader('Cache-Control', 'no-cache, no-transform');
+            this.response.setHeader('X-Accel-Buffering', 'no');
+            this.eventStream();
+            return;
+        }
         if (this.request.method === 'GET') {
             this.get();
             return;
@@ -47,6 +58,18 @@ export default abstract class Rest<
         this.response.status(code).json(responseData);
     };
 
+    public checkSession = async () => {
+        const session = await unstable_getServerSession(this.request, this.response, authOptions);
+        if (session === null) {
+            this.respond(StatusCode.Unauthorized, {
+                status: 'error',
+                message: 'Authorization required',
+            });
+            throw new Error('Authorization required');
+        }
+        return session;
+    };
+
     protected get = () => {
         this.notImplenented();
     };
@@ -60,6 +83,10 @@ export default abstract class Rest<
     };
 
     protected delete = () => {
+        this.notImplenented();
+    };
+
+    protected eventStream = () => {
         this.notImplenented();
     };
 

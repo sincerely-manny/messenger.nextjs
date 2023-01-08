@@ -1,15 +1,27 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { PrismaClient } from '@prisma/client';
 // import { compare } from 'bcrypt';
-import NextAuth from 'next-auth';
+import NextAuth, { CallbacksOptions } from 'next-auth';
 // import CredentialsProvider from 'next-auth/providers/credentials';
 import GitHubProvider from 'next-auth/providers/github';
+import GoogleProvider from 'next-auth/providers/google';
 
 const prisma = new PrismaClient();
 
+const callbacks: Partial<CallbacksOptions> = {
+    // eslint-disable-next-line @typescript-eslint/require-await
+    jwt: async ({ token, user }) => (user ? { ...token, id: user.id } : token),
+    // eslint-disable-next-line @typescript-eslint/require-await
+    session: async ({ session, user }) => {
+        // eslint-disable-next-line no-param-reassign
+        session.user.id = user.id;
+        return session;
+    },
+};
+
 export const authOptions = {
     adapter: PrismaAdapter(prisma),
-    debug: true,
+    debug: false,
     session: {
         maxAge: 30 * 24 * 60 * 60, // 30 days
         updateAge: 24 * 60 * 60, // 24 hours
@@ -57,7 +69,12 @@ export const authOptions = {
             clientId: process.env.GITHUB_ID || '',
             clientSecret: process.env.GITHUB_SECRET || '',
         }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID || '',
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+        }),
     ],
+    callbacks,
 };
 
 export default NextAuth(authOptions);
