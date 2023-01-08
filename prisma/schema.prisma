@@ -44,6 +44,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   chats         Chat[]
+  messages      Message[]
 }
 
 model VerificationToken {
@@ -55,9 +56,27 @@ model VerificationToken {
 }
 
 model Chat {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   title     String?
   image     String?
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
   users     User[]
+  messages  Message[]
+}
+
+enum MessageStatus {
+  SENT
+  DELIVERED
+  READ
+}
+
+model Message {
+  id     String        @id @default(cuid())
+  text   String?
+  sentAt DateTime      @default(now())
+  sentBy User          @relation(fields: [userId], references: [id])
+  sentTo Chat          @relation(fields: [chatId], references: [id])
+  userId String
+  chatId String
+  status MessageStatus @default(SENT)
 }

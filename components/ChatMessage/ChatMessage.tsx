@@ -1,4 +1,5 @@
 import Spinner from 'components/Spinner';
+import { toHhMm } from 'lib/date/timeFormat';
 import { HTMLProps } from 'react';
 import './ChatMessage.scss';
 
@@ -8,7 +9,7 @@ type ChatMessageProps = HTMLProps<HTMLDivElement> & {
 };
 
 const ChatMessage = ({ children, fromSelf = false, timestamp = undefined }: ChatMessageProps) => {
-    const formattedTime = timestamp ? new Date(parseInt(timestamp, 10)).toLocaleTimeString('ru-RU', { timeStyle: 'short' }) : null;
+    const formattedTime = timestamp ? toHhMm(timestamp) : null;
     return (
         <div className={`message-container ${fromSelf ? 'message-self' : ''}`}>
             <div className="message-text">

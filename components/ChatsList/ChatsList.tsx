@@ -1,12 +1,12 @@
 'use client';
 
-import ChatListItem from 'components/ChatListItem';
+import ChatListItem, { ChatListItemProps } from 'components/ChatListItem';
 import Spinner from 'components/Spinner';
 import { useGetChatsListQuery } from 'service';
 import './ChatsList.scss';
 
 const ChatsList = () => {
-    const { data, error, isLoading } = useGetChatsListQuery(null);
+    const { data: chats, error, isLoading } = useGetChatsListQuery(null);
 
     if (error) {
         return (
@@ -17,16 +17,26 @@ const ChatsList = () => {
     if (isLoading) {
         return (
             <center>
-                <Spinner size={40} />
+                <Spinner size={80} />
             </center>
         );
     }
-    console.log(data?.payload);
+
     return (
         <aside className="chats-list">
-            {/* {data?.payload?.map((chat) => (
-                <ChatListItem chatData={chat} />
-            ))} */}
+            {chats?.map((chat) => {
+                const c: ChatListItemProps['chatData'] = {
+                    id: chat.id,
+                    image: chat.image,
+                    title: chat.title,
+                    preview: 'preview',
+                    lastMessageAt: Date.now(),
+                    users: chat.users,
+                };
+                return (
+                    <ChatListItem chatData={c} />
+                );
+            })}
         </aside>
     );
 };
