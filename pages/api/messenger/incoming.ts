@@ -11,15 +11,16 @@ export const config = {
 };
 
 class Incoming extends Rest {
-    eventStream = async () => {
-        const session = await this.checkSession();
-        if (!session) {
-            return;
-        }
+    eventStream = () => {
+        // const session = await this.checkSession();
+        // if (!session) {
+        //     return;
+        // }
 
         const sse = ServerSentEvents.getInstance();
 
-        const clientId = session.user.id;
+        // const clientId = session.user.id;
+        const clientId = 'clb8porik0000rip3uppbqxgx';
 
         sse.connect(clientId, this.response, this.request.headers);
 
