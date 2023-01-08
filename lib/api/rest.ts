@@ -29,9 +29,9 @@ export default abstract class Rest<
         this.response = res;
         this.query = req.query;
         if (this.request.method === 'GET' && this.request.headers.accept === 'text/event-stream') {
-            // this.response.setHeader('Access-Control-Allow-Origin', '*');
+            this.response.setHeader('Access-Control-Allow-Origin', '*');
             this.response.setHeader('Connection', 'keep-alive');
-            this.response.setHeader('Content-Type', 'text/event-stream');
+            this.response.setHeader('Content-Type', 'text/event-stream;charset=utf-8');
             this.response.setHeader('Content-Encoding', 'none');
             this.response.setHeader('Cache-Control', 'no-cache, no-transform');
             this.response.setHeader('X-Accel-Buffering', 'no');
