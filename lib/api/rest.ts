@@ -35,6 +35,7 @@ export default abstract class Rest<
             this.response.setHeader('Content-Encoding', 'none');
             this.response.setHeader('Cache-Control', 'no-cache, no-transform');
             this.response.setHeader('X-Accel-Buffering', 'no');
+            this.response.status(StatusCode.Ok);
             this.eventStream();
             return;
         }
