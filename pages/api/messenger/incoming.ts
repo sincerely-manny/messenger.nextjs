@@ -3,6 +3,12 @@ import ServerSentEvents, { ServerSentEventType } from 'lib/sse/serverSentEvents'
 
 // curl -Nv localhost:3000/api/messenger/incoming
 
+export const config = {
+    api: {
+        bodyParser: false,
+    },
+};
+
 class Incoming extends Rest {
     eventStream = async () => {
         const session = await this.checkSession();

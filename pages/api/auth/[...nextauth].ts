@@ -12,11 +12,7 @@ const callbacks: Partial<CallbacksOptions> = {
     // eslint-disable-next-line @typescript-eslint/require-await
     jwt: async ({ token, user }) => (user ? { ...token, id: user.id } : token),
     // eslint-disable-next-line @typescript-eslint/require-await
-    session: async ({ session, user }) => {
-        // eslint-disable-next-line no-param-reassign
-        session.user.id = user.id;
-        return session;
-    },
+    session: async ({ session, user }) => ({ ...session, user: { ...session.user, id: user.id } }),
 };
 
 export const authOptions = {
