@@ -6,6 +6,7 @@ import ServerSentEvents, { ServerSentEventType } from 'lib/sse/serverSentEvents'
 export const config = {
     api: {
         bodyParser: false,
+        externalResolver: true,
     },
 };
 
