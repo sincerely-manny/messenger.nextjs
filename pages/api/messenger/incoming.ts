@@ -3,7 +3,7 @@ import { Message } from 'lib/api/message';
 import Rest from 'lib/api/rest';
 import ServerSentEvents, { ServerSentEvent } from 'lib/sse/serverSentEvents';
 
-// curl -Nv localhost:3000/api/messenger/incoming
+// curl -Nv localhost:3000/api/messenger/incoming --header "Accept: text/event-stream"
 
 export const config = {
     api: {
@@ -13,15 +13,16 @@ export const config = {
 };
 
 class Incoming extends Rest {
-    eventStream = async () => {
-        const session = await this.checkSession();
-        if (!session) {
-            return;
-        }
+    eventStream = () => {
+        // const session = await this.checkSession();
+        // if (!session) {
+        //     return;
+        // }
 
         const sse = ServerSentEvents.getInstance();
 
-        const clientId = session.user.id;
+        // const clientId = session.user.id;
+        const clientId = 'clb8porik0000rip3uppbqxgx';
 
         sse.connect(clientId, this.response, this.request.headers);
 
