@@ -92,33 +92,33 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
         res.write(`data: Hello seq ${i}\n\n`);
     }
 
-    sse.send({
-        message: 'connected',
-        type: ServerSentEvent.HANDSHAKE,
-        clientId,
-    });
+    // sse.send({
+    //     message: 'connected',
+    //     type: ServerSentEvent.HANDSHAKE,
+    //     clientId,
+    // });
 
-    sse.send({
-        message: {
-            text: 'HELLOOOOO!!!',
-            id: nanoid(),
-            senderId: clientId,
-        } as Message,
-        type: ServerSentEvent.MESSAGE,
-        clientId,
-    });
+    // sse.send({
+    //     message: {
+    //         text: 'HELLOOOOO!!!',
+    //         id: nanoid(),
+    //         senderId: clientId,
+    //     } as Message,
+    //     type: ServerSentEvent.MESSAGE,
+    //     clientId,
+    // });
 
-    setTimeout(() => {
-        sse.send({
-            message: {
-                text: 'HELLOOOOO 5 sec later!!!',
-                id: nanoid(),
-                senderId: clientId,
-            } as Message,
-            type: ServerSentEvent.MESSAGE,
-            clientId,
-        });
-    }, 5000);
+    // setTimeout(() => {
+    //     sse.send({
+    //         message: {
+    //             text: 'HELLOOOOO 5 sec later!!!',
+    //             id: nanoid(),
+    //             senderId: clientId,
+    //         } as Message,
+    //         type: ServerSentEvent.MESSAGE,
+    //         clientId,
+    //     });
+    // }, 5000);
 
     res.on('close', () => {
         sse.disconnect(clientId);
