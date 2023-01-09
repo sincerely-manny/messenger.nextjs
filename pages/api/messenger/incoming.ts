@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 // import { nanoid } from '@reduxjs/toolkit';
 // import { Message } from 'lib/api/message';
 // import Rest from 'lib/api/rest';
-// import ServerSentEvents, { ServerSentEvent } from 'lib/sse/serverSentEvents';
+import ServerSentEvents, { ServerSentEvent } from 'lib/sse/serverSentEvents';
 
 // curl -Nv localhost:3000/api/messenger/incoming --header "Accept: text/event-stream"
 
@@ -77,6 +77,10 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     res.setHeader('Content-Type', 'text/event-stream;charset=utf-8');
     res.setHeader('Cache-Control', 'no-cache, no-transform');
     res.setHeader('X-Accel-Buffering', 'no');
+
+    const sse = ServerSentEvents.getInstance();
+    const clientId = 'clb8porik0000rip3uppbqxgx';
+    sse.connect(clientId, res, req.headers);
 
     for (let i = 0; i < 5; i++) {
         res.write(`data: Hello seq ${i}\n\n`);
