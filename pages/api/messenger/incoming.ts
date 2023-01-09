@@ -1,6 +1,7 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 // import { nanoid } from '@reduxjs/toolkit';
 // import { Message } from 'lib/api/message';
-import Rest from 'lib/api/rest';
+// import Rest from 'lib/api/rest';
 // import ServerSentEvents, { ServerSentEvent } from 'lib/sse/serverSentEvents';
 
 // curl -Nv localhost:3000/api/messenger/incoming --header "Accept: text/event-stream"
@@ -12,61 +13,75 @@ import Rest from 'lib/api/rest';
 //     },
 // };
 
-class Incoming extends Rest {
-    eventStream = () => {
-        // const session = await this.checkSession();
-        // if (!session) {
-        //     return;
-        // }
+// class Incoming extends Rest {
+//     eventStream = () => {
+//         // const session = await this.checkSession();
+//         // if (!session) {
+//         //     return;
+//         // }
 
-        // const sse = ServerSentEvents.getInstance();
+//         // const sse = ServerSentEvents.getInstance();
 
-        // const clientId = session.user.id;
-        // const clientId = 'clb8porik0000rip3uppbqxgx';
+//         // const clientId = session.user.id;
+//         // const clientId = 'clb8porik0000rip3uppbqxgx';
 
-        // sse.connect(clientId, this.response, this.request.headers);
+//         // sse.connect(clientId, this.response, this.request.headers);
 
-        this.response.setHeader('Access-Control-Allow-Origin', '*');
-        this.response.setHeader('Content-Type', 'text/event-stream;charset=utf-8');
-        this.response.setHeader('Cache-Control', 'no-cache, no-transform');
-        this.response.setHeader('X-Accel-Buffering', 'no');
+//         this.response.setHeader('Access-Control-Allow-Origin', '*');
+//         this.response.setHeader('Content-Type', 'text/event-stream;charset=utf-8');
+//         this.response.setHeader('Cache-Control', 'no-cache, no-transform');
+//         this.response.setHeader('X-Accel-Buffering', 'no');
 
-        for (let i = 0; i < 5; i++) {
-            this.response.write(`data: !Hello seq ${i}\n\n`);
-        }
+//         for (let i = 0; i < 5; i++) {
+//             this.response.write(`data: !Hello seq ${i}\n\n`);
+//         }
 
-        // sse.send({
-        //     message: 'connected',
-        //     type: ServerSentEvent.HANDSHAKE,
-        //     clientId,
-        // });
+//         // sse.send({
+//         //     message: 'connected',
+//         //     type: ServerSentEvent.HANDSHAKE,
+//         //     clientId,
+//         // });
 
-        // sse.send({
-        //     message: {
-        //         text: 'HELLOOOOO!!!',
-        //         id: nanoid(),
-        //         senderId: clientId,
-        //     } as Message,
-        //     type: ServerSentEvent.MESSAGE,
-        //     clientId,
-        // });
+//         // sse.send({
+//         //     message: {
+//         //         text: 'HELLOOOOO!!!',
+//         //         id: nanoid(),
+//         //         senderId: clientId,
+//         //     } as Message,
+//         //     type: ServerSentEvent.MESSAGE,
+//         //     clientId,
+//         // });
 
-        // setTimeout(() => {
-        //     sse.send({
-        //         message: {
-        //             text: 'HELLOOOOO 5 sec later!!!',
-        //             id: nanoid(),
-        //             senderId: clientId,
-        //         } as Message,
-        //         type: ServerSentEvent.MESSAGE,
-        //         clientId,
-        //     });
-        // }, 5000);
+//         // setTimeout(() => {
+//         //     sse.send({
+//         //         message: {
+//         //             text: 'HELLOOOOO 5 sec later!!!',
+//         //             id: nanoid(),
+//         //             senderId: clientId,
+//         //         } as Message,
+//         //         type: ServerSentEvent.MESSAGE,
+//         //         clientId,
+//         //     });
+//         // }, 5000);
 
-        // this.response.on('close', () => {
-        //     sse.disconnect(clientId);
-        // });
-    };
-}
+//         // this.response.on('close', () => {
+//         //     sse.disconnect(clientId);
+//         // });
+//     };
+// }
 
-export default new Incoming().handler;
+// export default new Incoming().handler;
+
+const handler = (req: NextApiRequest, res: NextApiResponse) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Content-Type', 'text/event-stream;charset=utf-8');
+    res.setHeader('Cache-Control', 'no-cache, no-transform');
+    res.setHeader('X-Accel-Buffering', 'no');
+
+    for (let i = 0; i < 5; i++) {
+        res.write(`data: Hello seq ${i}\n\n`);
+    }
+    res.end('done\n');
+};
+
+export default handler;
