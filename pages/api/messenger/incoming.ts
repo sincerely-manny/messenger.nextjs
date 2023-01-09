@@ -3,15 +3,16 @@ import { NextApiRequest, NextApiResponse } from 'next';
 // import { Message } from 'lib/api/message';
 // import Rest from 'lib/api/rest';
 import ServerSentEvents, { ServerSentEvent } from 'lib/sse/serverSentEvents';
+import { StatusCode } from 'lib/api/general';
 
 // curl -Nv localhost:3000/api/messenger/incoming --header "Accept: text/event-stream"
 
-// export const config = {
-//     api: {
-//         bodyParser: false,
-//         externalResolver: true,
-//     },
-// };
+export const config = {
+    api: {
+        bodyParser: false,
+        externalResolver: true,
+    },
+};
 
 // class Incoming extends Rest {
 //     eventStream = () => {
@@ -73,10 +74,13 @@ import ServerSentEvents, { ServerSentEvent } from 'lib/sse/serverSentEvents';
 // export default new Incoming().handler;
 
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    // res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Connection', 'keep-alive');
     res.setHeader('Content-Type', 'text/event-stream;charset=utf-8');
+    res.setHeader('Content-Encoding', 'none');
     res.setHeader('Cache-Control', 'no-cache, no-transform');
     res.setHeader('X-Accel-Buffering', 'no');
+    res.status(StatusCode.Ok);
 
     const sse = ServerSentEvents.getInstance();
     const clientId = 'clb8porik0000rip3uppbqxgx';
