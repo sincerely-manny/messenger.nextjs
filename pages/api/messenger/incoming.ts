@@ -118,9 +118,9 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     //     });
     // }, 5000);
 
-    res.on('close', () => {
-        sse.disconnect(clientId);
-    });
+    // res.on('close', () => {
+    //     sse.disconnect(clientId);
+    // });
 
     // res.end('done\n');
 };

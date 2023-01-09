@@ -10,7 +10,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     for (let i = 0; i < 5; i++) {
         res.write(`data: Hello seq ${i}\n\n`);
     }
-    res.end('done\n');
+    // res.end('done\n');
 };
 
 export default handler;
