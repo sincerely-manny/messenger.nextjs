@@ -5,12 +5,12 @@ import ServerSentEvents, { ServerSentEvent } from 'lib/sse/serverSentEvents';
 
 // curl -Nv localhost:3000/api/messenger/incoming --header "Accept: text/event-stream"
 
-export const config = {
-    api: {
-        bodyParser: false,
-        externalResolver: true,
-    },
-};
+// export const config = {
+//     api: {
+//         bodyParser: false,
+//         externalResolver: true,
+//     },
+// };
 
 class Incoming extends Rest {
     eventStream = () => {
