@@ -1,7 +1,7 @@
-import { nanoid } from '@reduxjs/toolkit';
-import { Message } from 'lib/api/message';
+// import { nanoid } from '@reduxjs/toolkit';
+// import { Message } from 'lib/api/message';
 import Rest from 'lib/api/rest';
-import ServerSentEvents, { ServerSentEvent } from 'lib/sse/serverSentEvents';
+// import ServerSentEvents, { ServerSentEvent } from 'lib/sse/serverSentEvents';
 
 // curl -Nv localhost:3000/api/messenger/incoming --header "Accept: text/event-stream"
 
