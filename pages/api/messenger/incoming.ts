@@ -4,6 +4,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 // import Rest from 'lib/api/rest';
 import ServerSentEvents, { ServerSentEvent } from 'lib/sse/serverSentEvents';
 import { StatusCode } from 'lib/api/general';
+import { nanoid } from '@reduxjs/toolkit';
+import { Message } from 'lib/api/message';
 
 // curl -Nv localhost:3000/api/messenger/incoming --header "Accept: text/event-stream"
 
@@ -89,7 +91,40 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     for (let i = 0; i < 5; i++) {
         res.write(`data: Hello seq ${i}\n\n`);
     }
-    res.end('done\n');
+
+    sse.send({
+        message: 'connected',
+        type: ServerSentEvent.HANDSHAKE,
+        clientId,
+    });
+
+    sse.send({
+        message: {
+            text: 'HELLOOOOO!!!',
+            id: nanoid(),
+            senderId: clientId,
+        } as Message,
+        type: ServerSentEvent.MESSAGE,
+        clientId,
+    });
+
+    setTimeout(() => {
+        sse.send({
+            message: {
+                text: 'HELLOOOOO 5 sec later!!!',
+                id: nanoid(),
+                senderId: clientId,
+            } as Message,
+            type: ServerSentEvent.MESSAGE,
+            clientId,
+        });
+    }, 5000);
+
+    res.on('close', () => {
+        sse.disconnect(clientId);
+    });
+
+    // res.end('done\n');
 };
 
 export default handler;
