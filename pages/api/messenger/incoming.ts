@@ -19,10 +19,10 @@ class Incoming extends Rest {
         //     return;
         // }
 
-        const sse = ServerSentEvents.getInstance();
+        // const sse = ServerSentEvents.getInstance();
 
         // const clientId = session.user.id;
-        const clientId = 'clb8porik0000rip3uppbqxgx';
+        // const clientId = 'clb8porik0000rip3uppbqxgx';
 
         // sse.connect(clientId, this.response, this.request.headers);
 
@@ -32,40 +32,40 @@ class Incoming extends Rest {
         this.response.setHeader('X-Accel-Buffering', 'no');
 
         for (let i = 0; i < 5; i++) {
-            this.response.write(`data: Hello seq ${i}\n\n`);
+            this.response.write(`data: !Hello seq ${i}\n\n`);
         }
 
-        sse.send({
-            message: 'connected',
-            type: ServerSentEvent.HANDSHAKE,
-            clientId,
-        });
+        // sse.send({
+        //     message: 'connected',
+        //     type: ServerSentEvent.HANDSHAKE,
+        //     clientId,
+        // });
 
-        sse.send({
-            message: {
-                text: 'HELLOOOOO!!!',
-                id: nanoid(),
-                senderId: clientId,
-            } as Message,
-            type: ServerSentEvent.MESSAGE,
-            clientId,
-        });
+        // sse.send({
+        //     message: {
+        //         text: 'HELLOOOOO!!!',
+        //         id: nanoid(),
+        //         senderId: clientId,
+        //     } as Message,
+        //     type: ServerSentEvent.MESSAGE,
+        //     clientId,
+        // });
 
-        setTimeout(() => {
-            sse.send({
-                message: {
-                    text: 'HELLOOOOO 5 sec later!!!',
-                    id: nanoid(),
-                    senderId: clientId,
-                } as Message,
-                type: ServerSentEvent.MESSAGE,
-                clientId,
-            });
-        }, 5000);
+        // setTimeout(() => {
+        //     sse.send({
+        //         message: {
+        //             text: 'HELLOOOOO 5 sec later!!!',
+        //             id: nanoid(),
+        //             senderId: clientId,
+        //         } as Message,
+        //         type: ServerSentEvent.MESSAGE,
+        //         clientId,
+        //     });
+        // }, 5000);
 
-        this.response.on('close', () => {
-            sse.disconnect(clientId);
-        });
+        // this.response.on('close', () => {
+        //     sse.disconnect(clientId);
+        // });
     };
 }
 
