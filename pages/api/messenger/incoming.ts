@@ -24,7 +24,16 @@ class Incoming extends Rest {
         // const clientId = session.user.id;
         const clientId = 'clb8porik0000rip3uppbqxgx';
 
-        sse.connect(clientId, this.response, this.request.headers);
+        // sse.connect(clientId, this.response, this.request.headers);
+
+        this.response.setHeader('Access-Control-Allow-Origin', '*');
+        this.response.setHeader('Content-Type', 'text/event-stream;charset=utf-8');
+        this.response.setHeader('Cache-Control', 'no-cache, no-transform');
+        this.response.setHeader('X-Accel-Buffering', 'no');
+
+        for (let i = 0; i < 5; i++) {
+            this.response.write(`data: Hello seq ${i}\n\n`);
+        }
 
         sse.send({
             message: 'connected',
