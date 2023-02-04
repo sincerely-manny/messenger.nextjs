@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import popUpNotificationReducer from 'components/PopUpNotifications/slice';
 import connectedStateReducer from 'components/ConnectionStatus/connectedState.slice';
 import messagesReducer from 'app/messenger/messages.slice';
-import { chatsApi } from 'service';
+import { chatsApi, pusherApi } from 'service';
 import { setupListeners } from '@reduxjs/toolkit/dist/query';
 
 export const store = configureStore({
@@ -11,8 +11,10 @@ export const store = configureStore({
         connectedState: connectedStateReducer,
         messages: messagesReducer,
         [chatsApi.reducerPath]: chatsApi.reducer,
+        [pusherApi.reducerPath]: pusherApi.reducer,
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(chatsApi.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+        .concat(chatsApi.middleware, pusherApi.middleware),
 });
 
 setupListeners(store.dispatch);

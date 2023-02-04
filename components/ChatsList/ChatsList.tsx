@@ -34,7 +34,7 @@ const ChatsList = () => {
                     users: chat.users,
                 };
                 return (
-                    <ChatListItem chatData={c} />
+                    <ChatListItem chatData={c} key={c.id} />
                 );
             })}
         </aside>

@@ -15,3 +15,20 @@ export const chatsApi = createApi({
 });
 
 export const { useGetChatsListQuery } = chatsApi;
+
+type ApiKeyResponse = { appKey: string };
+
+export const pusherApi = createApi({
+    reducerPath: 'pusherApi',
+    baseQuery: fetchBaseQuery({ baseUrl: '/api/messenger/' }),
+    endpoints: (builder) => ({
+        getPusherAppKey: builder.query<ApiKeyResponse, null>({
+            query: () => 'pusher-auth',
+            transformResponse: (
+                response: { payload: ApiKeyResponse },
+            ) => response.payload,
+        }),
+    }),
+});
+
+export const { useGetPusherAppKeyQuery } = pusherApi;

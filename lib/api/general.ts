@@ -4,10 +4,7 @@ export type ApiResponse<Payload = undefined> = {
     payload?: Payload,
 };
 
-export type ApiResponseError = {
-    status: 'error',
-    message: string,
-};
+export type ApiResponseError<Payload = undefined> = ApiResponse<Payload>;
 
 export enum StatusCode {
     Ok = 200,

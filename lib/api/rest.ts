@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { unstable_getServerSession } from 'next-auth';
+import { getServerSession } from 'next-auth';
 import { authOptions } from 'pages/api/auth/[...nextauth]';
 import { ApiResponse, ApiResponseError, StatusCode } from './general';
+import { PusherAuthRes } from './pusher';
 
 type Q = Partial<{ [key: string]: string | string[]; }>;
 
@@ -12,16 +13,25 @@ interface NextApiRequestExtended<RequestBodyType, QueryType extends Q> extends N
 
 export default abstract class Rest<
     RequestBodyType = undefined,
-    ResponseBodyType extends ApiResponse<unknown> = ApiResponse<undefined>,
+    ResponseBodyType extends ApiResponse<unknown> | PusherAuthRes
+    = ApiResponse<undefined>,
     QueryType extends Q = Record<string, never>,
 > {
     protected request!: NextApiRequestExtended<RequestBodyType, QueryType>;
 
-    protected response!: NextApiResponse<ResponseBodyType | ApiResponseError>;
+    protected response!:
+    NextApiResponse<ResponseBodyType | ApiResponseError | PusherAuthRes>;
 
     protected query?: typeof this.request.query;
 
-    public handler = (
+    protected withAuth: Partial<{
+        GET: boolean,
+        POST: boolean,
+        PUT: boolean,
+        DELETE: boolean,
+    }> = {};
+
+    public handler = async (
         req: typeof this.request,
         res: typeof this.response,
     ) => {
@@ -38,6 +48,15 @@ export default abstract class Rest<
             this.response.status(StatusCode.Ok);
             this.eventStream();
             return;
+        }
+        if (
+            this.request.method
+            && this.withAuth[this.request.method as keyof typeof this.withAuth] === true
+        ) {
+            const session = await this.checkSession();
+            if (!session) {
+                return;
+            }
         }
         if (this.request.method === 'GET') {
             this.get();
@@ -56,12 +75,15 @@ export default abstract class Rest<
         }
     };
 
-    protected respond = (code: StatusCode, responseData: ResponseBodyType | ApiResponseError) => {
+    protected respond = (
+        code: StatusCode,
+        responseData: ResponseBodyType | ApiResponseError | PusherAuthRes,
+    ) => {
         this.response.status(code).json(responseData);
     };
 
     public checkSession = async () => {
-        const session = await unstable_getServerSession(this.request, this.response, authOptions);
+        const session = await getServerSession(this.request, this.response, authOptions);
         if (session === null) {
             this.respond(StatusCode.Unauthorized, {
                 status: 'error',
@@ -97,5 +119,6 @@ export default abstract class Rest<
             status: 'error',
             message: `Method ${this.request?.method || ''} is not implemented`,
         });
+        this.response.end();
     };
 }

@@ -18,19 +18,13 @@ const SignUp = () => {
         actions,
     ) => {
         const res = axios.post<SignUpInputs, AxiosResponse<SignUpResponse>>('/api/user/signup', values);
-        res.then((r) => {
-            dispatch(addNotification({
-                type: 'success',
-                message: JSON.stringify(r.data.payload).replaceAll(',', ' ') || 'Undefined',
-                title: 'Sent:',
-            }));
-        }).catch((e: AxiosError<SignUpResponse>) => {
+        res.then(() => {}).catch((e: AxiosError<SignUpResponse>) => {
             if (e.response?.data.status === 'error' && e.response.data.payload?.path) {
                 // We've got a Yup.ValidationError - let's hilight the field
                 const { path, message } = e.response.data.payload;
                 errors[path] = message;
             } else {
-                // Probably something else – just nitify
+                // Probably something else – just notify
                 dispatch(addNotification({
                     type: 'error',
                     message: e.response?.data.message || 'Error sending data',
