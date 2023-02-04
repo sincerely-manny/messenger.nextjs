@@ -19,5 +19,5 @@ export type PusherAuthRes = Pusher.UserAuthResponse | Pusher.ChannelAuthResponse
 export default pusherConfig;
 
 export const PUSHER_PRIVATE_CHANNEL_PREFIX = 'private-';
-export const PUSHER_PRESENCE_CHANNEL_NAME = 'presence-global';
+export const PUSHER_PRESENCE_CHANNEL_NAME = 'presence-ch-global';
 export const PUSHER_AUTH_ENDPOINT = '/api/messenger/pusher-auth';

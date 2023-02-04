@@ -1,7 +1,8 @@
 import { ApiResponse, StatusCode } from 'lib/api/general';
 import { Message } from 'lib/api/message';
+import pusherConfig, { PUSHER_PRIVATE_CHANNEL_PREFIX } from 'lib/api/pusher';
 import Rest from 'lib/api/rest';
-import ServerSentEvents, { ServerSentEvent } from 'lib/sse/serverSentEvents';
+import Pusher from 'pusher';
 
 class Outgoing extends Rest<Message, ApiResponse> {
     post = async () => {
@@ -10,7 +11,7 @@ class Outgoing extends Rest<Message, ApiResponse> {
             return;
         }
 
-        const sse = ServerSentEvents.getInstance();
+        const pusher = new Pusher(pusherConfig);
 
         const clientId = session.user.id;
 
@@ -20,11 +21,9 @@ class Outgoing extends Rest<Message, ApiResponse> {
             timestamp: Date.now().toString(),
         };
 
-        sse.send({
-            message,
-            type: ServerSentEvent.MESSAGE,
-            clientId,
-        });
+        pusher
+            .trigger(`${PUSHER_PRIVATE_CHANNEL_PREFIX}${session.user.id}`, 'message', message)
+            .catch(() => {});
 
         this.respond(StatusCode.Ok, {
             status: 'ok',
