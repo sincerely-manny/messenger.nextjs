@@ -21,9 +21,7 @@ class Outgoing extends Rest<Message, ApiResponse> {
             timestamp: Date.now().toString(),
         };
 
-        pusher
-            .trigger(`${PUSHER_PRIVATE_CHANNEL_PREFIX}${session.user.id}`, 'message', message)
-            .catch(() => {});
+        await pusher.trigger(`${PUSHER_PRIVATE_CHANNEL_PREFIX}${session.user.id}`, 'message', message);
 
         this.respond(StatusCode.Ok, {
             status: 'ok',

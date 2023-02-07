@@ -6,7 +6,7 @@ import pusherConfig, {
 } from 'lib/api/pusher';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
-import Pusher, { PresenceChannelData } from 'pusher';
+import Pusher from 'pusher';
 import { authOptions } from '../auth/[...nextauth]';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -37,7 +37,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 user_id: id,
                 user_info: session.user,
             });
-            console.log(PUSHER_PRESENCE_CHANNEL_NAME);
         } else {
             res.status(StatusCode.Unauthorized).json({ status: 'error', message: 'No access to this channel' });
             return;
@@ -59,6 +58,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         text: 'HELLOOOOO!!!',
                         id: nanoid(),
                         senderId: id,
+                        timestamp: Date.now().toString(),
                     } as Message,
                 ).catch(() => {});
             }, 5000);
