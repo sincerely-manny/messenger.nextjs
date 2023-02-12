@@ -6,9 +6,9 @@ import './ConnectionStatus.scss';
 
 const ConnectionStatus = (
     {
-        connectionStatus = connectedState.CLOSED,
+        connectionStatus,
     }: {
-        connectionStatus?: typeof connectedState[keyof typeof connectedState],
+        connectionStatus: typeof connectedState[keyof typeof connectedState],
     },
 ) => {
     // const connectionStatus = useSelector((state: RootState) => state.connectedState);
