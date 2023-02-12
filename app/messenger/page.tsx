@@ -25,7 +25,7 @@ const Messenger = () => {
     const dispatch = useDispatch();
     const [connectionStatus, setConnectionStatus] = useState(connectedState.CONNECTING);
 
-    const pusherConfig = trpc.pusherAppConfig.useQuery().data;
+    const pusherConfig = trpc.pusherAppConfig.useQuery(undefined, { staleTime: Infinity }).data;
 
     useMemo(() => {
         if (!pusherConfig?.appKey || !pusherConfig?.cluster || !session.data?.user.id) {

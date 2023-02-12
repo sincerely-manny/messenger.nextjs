@@ -1,13 +1,14 @@
 'use client';
 
+import { User } from '@prisma/client';
 import ChatListItem, { ChatListItemProps } from 'components/ChatListItem';
 import Spinner from 'components/Spinner';
-import { useGetChatsListQuery } from 'service';
+import { trpc } from 'components/withTrpcProvider';
 import './ChatsList.scss';
 
 const ChatsList = () => {
-    const { data: chats, error, isLoading } = useGetChatsListQuery(null);
-
+    // const { data: chats, error, isLoading } = useGetChatsListQuery(null);
+    const { data: chats, error, isLoading } = trpc.chat.list.useQuery();
     if (error) {
         return (
             <div>Error fetching chats list</div>
@@ -31,7 +32,7 @@ const ChatsList = () => {
                     title: chat.title,
                     preview: 'preview',
                     lastMessageAt: Date.now(),
-                    users: chat.users,
+                    users: chat.users as User[],
                 };
                 return (
                     <ChatListItem chatData={c} key={c.id} />

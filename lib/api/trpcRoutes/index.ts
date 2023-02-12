@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import { procedure } from '../trpc';
+import chat from './chat';
 import message from './message';
 import pusherAppConfig from './pusherAppConfig';
 
@@ -15,4 +16,5 @@ export default {
         })),
     pusherAppConfig,
     message,
+    chat,
 };

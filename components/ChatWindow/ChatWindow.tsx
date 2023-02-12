@@ -14,7 +14,7 @@ import { RootState } from 'store';
 import './ChatWindow.scss';
 
 const ChatWindow = () => {
-    const session = useSession({ required: true });
+    const session = useSession();
     const messages = useSelector((state: RootState) => state.messages);
     const dispatch = useDispatch();
 

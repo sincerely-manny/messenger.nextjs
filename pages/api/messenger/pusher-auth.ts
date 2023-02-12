@@ -1,6 +1,4 @@
-import { nanoid } from '@reduxjs/toolkit';
 import { StatusCode } from 'lib/api/general';
-import { Message } from 'lib/api/message';
 import pusherConfig, {
     PusherAuthReq, PusherAuthRes, PUSHER_PRESENCE_CHANNEL_NAME, PUSHER_PRIVATE_CHANNEL_PREFIX,
 } from 'lib/api/pusher';
@@ -50,18 +48,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     appKey,
                 },
             });
-            setTimeout(() => {
-                pusher.trigger(
-                    `${PUSHER_PRIVATE_CHANNEL_PREFIX}${session.user.id}`,
-                    'message',
-                    {
-                        text: 'HELLOOOOO!!!',
-                        id: nanoid(),
-                        senderId: id,
-                        timestamp: Date.now().toString(),
-                    } as Message,
-                ).catch(() => {});
-            }, 5000);
         } else {
             res.status(StatusCode.InternalError).json({
                 status: 'error',

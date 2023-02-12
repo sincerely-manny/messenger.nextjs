@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux';
 import './NewMessageForm.scss';
 
 const NewMessageForm = () => {
-    const session = useSession({ required: true });
+    const session = useSession();
     const dispatch = useDispatch();
     const sendMessageMutation = trpc.message.send.useMutation();
 
