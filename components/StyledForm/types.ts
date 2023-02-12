@@ -5,7 +5,7 @@ import {
 import * as Yup from 'yup';
 
 export type StyledFormProps<Values extends FormikValues> = Omit<HTMLProps<HTMLFormElement>, 'onSubmit'> & {
-    yupValidationSchema: Yup.SchemaOf<Values>,
+    yupValidationSchema: Yup.Schema<Values>,
 } & FormikConfig<Values> & {
     inputsList:
     {

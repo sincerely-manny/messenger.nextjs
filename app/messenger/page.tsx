@@ -4,7 +4,8 @@ import ChatsList from 'components/ChatsList';
 import ChatsListHeader from 'components/ChatsListHeader';
 import ChatWindow from 'components/ChatWindow';
 import ChatWindowHeader from 'components/ChatWindowHeader';
-import { connectedState, setConnectedState } from 'components/ConnectionStatus/connectedState.slice';
+import ConnectionStatus from 'components/ConnectionStatus';
+import { connectedState } from 'components/ConnectionStatus/connectedState.slice';
 import withSessionProvider from 'components/withSessionProvider';
 import withStoreProvider from 'components/withStoreProvider';
 import withTrpcProvider, { trpc } from 'components/withTrpcProvider';
@@ -14,7 +15,7 @@ import { useSession } from 'next-auth/react';
 import Pusher, { PresenceChannel } from 'pusher-js';
 // import Pusher from 'pusher-js/with-encryption';
 // TODO: add encrypted- when fixed https://github.com/pusher/pusher-js/issues/624
-import { useEffect, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateOrAppendMessage } from './messages.slice';
 import './page.scss';
@@ -22,14 +23,11 @@ import './page.scss';
 const Messenger = () => {
     const session = useSession({ required: true });
     const dispatch = useDispatch();
-
-    useMemo(() => {
-        dispatch(setConnectedState(connectedState.CONNECTING));
-    }, [dispatch]);
+    const [connectionStatus, setConnectionStatus] = useState(connectedState.CONNECTING);
 
     const pusherConfig = trpc.pusherAppConfig.useQuery().data;
 
-    const pusherSubscription = useMemo(() => {
+    useMemo(() => {
         if (!pusherConfig?.appKey || !pusherConfig?.cluster || !session.data?.user.id) {
             return false;
         }
@@ -43,10 +41,10 @@ const Messenger = () => {
         });
         const privateChannel = pusher.subscribe(`${PUSHER_PRIVATE_CHANNEL_PREFIX}${session.data?.user.id}`);
         privateChannel.bind('pusher:subscription_succeeded', () => {
-            dispatch(setConnectedState(connectedState.OPEN));
+            setConnectionStatus(connectedState.OPEN);
         });
         privateChannel.bind('pusher:subscription_error', () => {
-            dispatch(setConnectedState(connectedState.CLOSED));
+            setConnectionStatus(connectedState.CLOSED);
         });
         privateChannel.bind('message', (data: Message) => {
             dispatch(updateOrAppendMessage({
@@ -75,22 +73,12 @@ const Messenger = () => {
         return { pusher, privateChannel, presenceChannel };
     }, [dispatch, pusherConfig?.appKey, pusherConfig?.cluster, session.data?.user.id]);
 
-    useEffect(() => () => {
-        dispatch(setConnectedState(connectedState.CLOSED));
-        if (pusherSubscription) {
-            pusherSubscription.privateChannel.disconnect();
-            pusherSubscription.presenceChannel.disconnect();
-        }
-    }, [dispatch, pusherSubscription]);
-
-    // const u = trpc.hello.useQuery({ greeting: '111' }).data?.text;
-
-    // console.log('trpc test', u);
-
     return (
         <>
             <ChatsListHeader />
-            <ChatWindowHeader />
+            <ChatWindowHeader>
+                <ConnectionStatus connectionStatus={connectionStatus} />
+            </ChatWindowHeader>
             <ChatsList />
             <ChatWindow />
         </>

@@ -1,13 +1,17 @@
 import Spinner from 'components/Spinner';
 import { ReactElement } from 'react';
 import { VscDebugDisconnect } from 'react-icons/vsc';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store';
 import { connectedState } from './connectedState.slice';
 import './ConnectionStatus.scss';
 
-const ConnectionStatus = () => {
-    const connectionStatus = useSelector((state: RootState) => state.connectedState);
+const ConnectionStatus = (
+    {
+        connectionStatus = connectedState.CLOSED,
+    }: {
+        connectionStatus?: typeof connectedState[keyof typeof connectedState],
+    },
+) => {
+    // const connectionStatus = useSelector((state: RootState) => state.connectedState);
     let StatusDisplay: ReactElement;
     if (connectionStatus === connectedState.CONNECTING) {
         StatusDisplay = (

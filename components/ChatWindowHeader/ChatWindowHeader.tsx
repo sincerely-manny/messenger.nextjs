@@ -1,12 +1,15 @@
 'use client';
 
-import ConnectionStatus from 'components/ConnectionStatus';
+import { PropsWithChildren } from 'react';
 import './ChatWindowHeader.scss';
 
-const ChatWindowHeader = () => (
-    <header className="chat-window-header">
-        <ConnectionStatus />
-    </header>
-);
+const ChatWindowHeader = (props: PropsWithChildren) => {
+    const { children } = props;
+    return (
+        <header className="chat-window-header">
+            {children}
+        </header>
+    );
+};
 
 export default ChatWindowHeader;

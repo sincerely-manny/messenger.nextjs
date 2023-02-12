@@ -2,9 +2,7 @@
 
 import { nanoid } from '@reduxjs/toolkit';
 import { appendMessage } from 'app/messenger/messages.slice';
-import axios, { AxiosError } from 'axios';
-import { addNotification } from 'components/PopUpNotifications';
-import { Message } from 'lib/api/message';
+import { trpc } from 'components/withTrpcProvider';
 import { useSession } from 'next-auth/react';
 import {
     createRef, FormEvent, KeyboardEvent, useEffect, useState,
@@ -16,6 +14,7 @@ import './NewMessageForm.scss';
 const NewMessageForm = () => {
     const session = useSession({ required: true });
     const dispatch = useDispatch();
+    const sendMessageMutation = trpc.message.send.useMutation();
 
     const [form, setForm] = useState({
         message: '',
@@ -38,17 +37,11 @@ const NewMessageForm = () => {
             message: '',
             disabled: true,
         });
-        axios.post('/api/messenger/outgoing', {
+        sendMessageMutation.mutate({
             id: clientsideMessageId,
             text: form.message,
-            senderId: session.data?.user || '0',
-        } as Message)
-            .then(() => {})
-            .catch((err: AxiosError) => {
-                dispatch(addNotification({
-                    message: err.message,
-                }));
-            });
+            senderId: session.data?.user.id || '0',
+        });
     };
 
     // binding ctrl+enter to send

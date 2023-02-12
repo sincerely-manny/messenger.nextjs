@@ -4,7 +4,7 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createTRPCReact, httpBatchLink } from '@trpc/react-query';
-import { AppRouter } from 'lib/api/trpc';
+import { AppRouter } from 'lib/api/trpcRouter';
 import { useState } from 'react';
 
 export const trpc = createTRPCReact<AppRouter>();

@@ -27,7 +27,7 @@ export const SignUpSchema = Yup.object().shape({
         .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, 'Password shoud be minimum 8 characters and contain at least one letter and a number')
         .required('Please input your password'),
     confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password'), null], 'Passwords must match')
+        .oneOf([Yup.ref('password'), undefined], 'Passwords must match')
         .required('Please input your password'),
 });
 
