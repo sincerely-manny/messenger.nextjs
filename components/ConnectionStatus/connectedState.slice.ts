@@ -15,8 +15,8 @@ export const connectedStateSlice = createSlice({
     name: 'connectedState',
     initialState,
     reducers: {
-        setConnectedState: (state, action: PayloadAction<ConnectedState>) => {
-            state = action.payload;
+        setConnectedState: (_state, action: PayloadAction<ConnectedState>) => {
+            _state = action.payload;
             return action.payload;
         },
     },

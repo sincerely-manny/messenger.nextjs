@@ -29,7 +29,7 @@ const NewMessageForm = () => {
             }
             return { previousMessages };
         },
-        onError: (err, newMessage, context) => {
+        onError: (_err, _newMessage, context) => {
             messageListUtils.setData(chatId, context?.previousMessages);
         },
         onSettled: async () => {

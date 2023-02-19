@@ -5,7 +5,7 @@ import './ChatMessage.scss';
 
 type ChatMessageProps = HTMLProps<HTMLDivElement> & {
     fromSelf?: boolean,
-    timestamp?: string,
+    timestamp?: Date,
 };
 
 const ChatMessage = ({ children, fromSelf = false, timestamp = undefined }: ChatMessageProps) => {

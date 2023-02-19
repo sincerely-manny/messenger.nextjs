@@ -1,6 +1,5 @@
 'use client';
 
-import { nanoid } from '@reduxjs/toolkit';
 import ChatMessage from 'components/ChatMessage';
 import NewMessageForm from 'components/NewMessageForm';
 import Spinner from 'components/Spinner';

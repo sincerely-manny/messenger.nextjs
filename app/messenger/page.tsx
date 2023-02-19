@@ -18,17 +18,12 @@ import { Message } from '@prisma/client';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useMemo, useState } from 'react';
 import './page.scss';
-import { useQueryClient } from '@tanstack/react-query';
-import { getQueryKey } from '@trpc/react-query';
 
 const Messenger = () => {
     const session = useSession({ required: true });
     const [connectionStatus, setConnectionStatus] = useState(connectedState.CONNECTING);
 
     const pusherConfig = trpc.pusherAppConfig.useQuery(undefined, { staleTime: Infinity }).data;
-
-    const queryClient = useQueryClient();
-    const queryKey = getQueryKey(trpc.message.list);
 
     useMemo(() => {
         if (!pusherConfig?.appKey || !pusherConfig?.cluster || !session.data?.user.id) {
@@ -49,7 +44,7 @@ const Messenger = () => {
         privateChannel.bind('pusher:subscription_error', () => {
             setConnectionStatus(connectedState.CLOSED);
         });
-        privateChannel.bind('message', (data: Message) => {
+        privateChannel.bind('message', (_data: Message) => {
             // dispatch(updateOrAppendMessage({
             //     message: data,
             //     chatId: 0,
