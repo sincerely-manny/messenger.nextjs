@@ -16,7 +16,7 @@ export type ChatListItemProps = {
         image: string | null,
         title: string | null,
         preview: string,
-        lastMessageAt: number,
+        lastMessageAt: string,
         users: User[],
     },
 };

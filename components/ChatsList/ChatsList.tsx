@@ -1,6 +1,5 @@
 'use client';
 
-import { User } from '@prisma/client';
 import ChatListItem, { ChatListItemProps } from 'components/ChatListItem';
 import Spinner from 'components/Spinner';
 import { trpc } from 'components/withTrpcProvider';
@@ -12,6 +11,7 @@ const ChatsList = () => {
     if (error) {
         return (
             <div>Error fetching chats list</div>
+            // TODO: Custom error message (icon??)
         );
     }
 
@@ -31,8 +31,8 @@ const ChatsList = () => {
                     image: chat.image,
                     title: chat.title,
                     preview: 'preview',
-                    lastMessageAt: Date.now(),
-                    users: chat.users as User[],
+                    lastMessageAt: new Date().toString(),
+                    users: chat.users,
                 };
                 return (
                     <ChatListItem chatData={c} key={c.id} />

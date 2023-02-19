@@ -65,6 +65,7 @@ model Chat {
 }
 
 enum MessageStatus {
+  SENDING
   SENT
   DELIVERED
   READ

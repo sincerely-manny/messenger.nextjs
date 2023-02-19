@@ -1,21 +1,20 @@
 'use client';
 
 import { nanoid } from '@reduxjs/toolkit';
-import { prependMessages } from 'app/messenger/messages.slice';
 import ChatMessage from 'components/ChatMessage';
 import NewMessageForm from 'components/NewMessageForm';
 import Spinner from 'components/Spinner';
-import { Message } from 'lib/api/message';
+import { trpc } from 'components/withTrpcProvider';
+
 import { throttle } from 'lodash';
 import { useSession } from 'next-auth/react';
 import { createRef, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'store';
+import { useDispatch } from 'react-redux';
 import './ChatWindow.scss';
 
 const ChatWindow = () => {
     const session = useSession();
-    const messages = useSelector((state: RootState) => state.messages);
+    const messages = trpc.message.list.useQuery('clcm46x3n0000rihrdhxpmkm1');
     const dispatch = useDispatch();
 
     const chatContainer = createRef<HTMLDivElement>();
@@ -28,29 +27,29 @@ const ChatWindow = () => {
             return () => {};
         }
         const elem = chatContainer.current;
-        const loader = () => { // older messages loader
-            chatContainerIsLoading.current = true;
-            if (chatContainerScrollHeight.current === undefined) {
-                chatContainerScrollHeight.current = elem.scrollHeight;
-            }
-            const newMessages:Message[] = [];
-            for (let i = 0; i < 5; i++) { // loading mock
-                newMessages.push({
-                    id: nanoid(),
-                    text: nanoid(),
-                    senderId: nanoid(),
-                });
-            }
-            dispatch(prependMessages({ messages: newMessages, chatId: 0 }));
-            if (elem.scrollTop === 0) { // TODO: Refactor onload-scroll behaviour
-                elem.scrollTo({
-                    top: elem.scrollHeight - chatContainerScrollHeight.current,
-                    behavior: 'auto',
-                });
-            }
-            chatContainerScrollHeight.current = elem.scrollHeight;
-            chatContainerIsLoading.current = false; // TODO: pay attention to preloader behaviour
-        };
+        // const loader = () => { // older messages loader
+        //     chatContainerIsLoading.current = true;
+        //     if (chatContainerScrollHeight.current === undefined) {
+        //         chatContainerScrollHeight.current = elem.scrollHeight;
+        //     }
+        //     const newMessages:Message[] = [];
+        //     for (let i = 0; i < 5; i++) { // loading mock
+        //         newMessages.push({
+        //             id: nanoid(),
+        //             text: nanoid(),
+        //             senderId: nanoid(),
+        //         });
+        //     }
+        //     dispatch(prependMessages({ messages: newMessages, chatId: 0 }));
+        //     if (elem.scrollTop === 0) { // TODO: Refactor onload-scroll behaviour
+        //         elem.scrollTo({
+        //             top: elem.scrollHeight - chatContainerScrollHeight.current,
+        //             behavior: 'auto',
+        //         });
+        //     }
+        //     chatContainerScrollHeight.current = elem.scrollHeight;
+        //     chatContainerIsLoading.current = false; // TODO: pay attention to preloader behaviour
+        // };
 
         const scrollToBottom = (instant = false) => {
             elem.scrollTo({
@@ -72,7 +71,7 @@ const ChatWindow = () => {
             wasScrolledToEnd = checkIfIsScrolledToEnd();
 
             if (elem.scrollTop <= 200 && !chatContainerIsLoading.current) {
-                loader();
+                // loader();
             }
         }, 500);
 
@@ -102,18 +101,18 @@ const ChatWindow = () => {
     return (
         <section className="chat-window">
             <div className="chat-messages-container" ref={chatContainer}>
-                {chatContainerIsLoading.current && (
+                {(chatContainerIsLoading.current || messages.isLoading) && (
                     <div className={`spinner ${chatContainerIsLoading.current ? 'active' : 'hidden'}`}>
                         <Spinner size={70} />
                     </div>
                 )}
-                {messages[0].map(({
-                    text, id, senderId, timestamp,
+                {messages.isSuccess && messages.data?.map(({
+                    text, id, userId, sentAt,
                 }) => (
                     <ChatMessage
-                        fromSelf={(senderId === session.data?.user.id)}
+                        fromSelf={(userId === session.data?.user.id)}
                         key={id}
-                        timestamp={timestamp}
+                        timestamp={sentAt}
                     >
                         {text}
                     </ChatMessage>

@@ -1,6 +1,10 @@
 import { StatusCode } from 'lib/api/general';
-import pusherConfig, {
-    PusherAuthReq, PusherAuthRes, PUSHER_PRESENCE_CHANNEL_NAME, PUSHER_PRIVATE_CHANNEL_PREFIX,
+import {
+    PusherAuthReq,
+    PusherAuthRes,
+    pusherConfig,
+    PUSHER_PRESENCE_CHANNEL_NAME,
+    PUSHER_PRIVATE_CHANNEL_PREFIX,
 } from 'lib/api/pusher';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
@@ -26,9 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 user_info: session.user,
                 watchlist: [id],
             });
-        } else if (
-            channel === `${PUSHER_PRIVATE_CHANNEL_PREFIX}${id}`
-        ) {
+        } else if (channel === `${PUSHER_PRIVATE_CHANNEL_PREFIX}${id}`) {
             authResponse = pusher.authorizeChannel(socketId, channel);
         } else if (channel === PUSHER_PRESENCE_CHANNEL_NAME) {
             authResponse = pusher.authorizeChannel(socketId, PUSHER_PRESENCE_CHANNEL_NAME, {
@@ -36,7 +38,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 user_info: session.user,
             });
         } else {
-            res.status(StatusCode.Unauthorized).json({ status: 'error', message: 'No access to this channel' });
+            res.status(StatusCode.Unauthorized).json({
+                status: 'error',
+                message: 'No access to this channel',
+            });
             return;
         }
         res.status(StatusCode.Ok).json(authResponse);

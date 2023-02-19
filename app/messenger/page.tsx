@@ -9,23 +9,26 @@ import { connectedState } from 'components/ConnectionStatus/connectedState.slice
 import withSessionProvider from 'components/withSessionProvider';
 import withStoreProvider from 'components/withStoreProvider';
 import withTrpcProvider, { trpc } from 'components/withTrpcProvider';
-import { Message } from 'lib/api/message';
 import { PUSHER_AUTH_ENDPOINT, PUSHER_PRESENCE_CHANNEL_NAME, PUSHER_PRIVATE_CHANNEL_PREFIX } from 'lib/api/pusher';
 import { useSession } from 'next-auth/react';
 import Pusher, { PresenceChannel } from 'pusher-js';
 // import Pusher from 'pusher-js/with-encryption';
 // TODO: add encrypted- when fixed https://github.com/pusher/pusher-js/issues/624
+import { Message } from '@prisma/client';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { updateOrAppendMessage } from './messages.slice';
 import './page.scss';
+import { useQueryClient } from '@tanstack/react-query';
+import { getQueryKey } from '@trpc/react-query';
 
 const Messenger = () => {
     const session = useSession({ required: true });
-    const dispatch = useDispatch();
     const [connectionStatus, setConnectionStatus] = useState(connectedState.CONNECTING);
 
     const pusherConfig = trpc.pusherAppConfig.useQuery(undefined, { staleTime: Infinity }).data;
+
+    const queryClient = useQueryClient();
+    const queryKey = getQueryKey(trpc.message.list);
 
     useMemo(() => {
         if (!pusherConfig?.appKey || !pusherConfig?.cluster || !session.data?.user.id) {
@@ -47,10 +50,10 @@ const Messenger = () => {
             setConnectionStatus(connectedState.CLOSED);
         });
         privateChannel.bind('message', (data: Message) => {
-            dispatch(updateOrAppendMessage({
-                message: data,
-                chatId: 0,
-            }));
+            // dispatch(updateOrAppendMessage({
+            //     message: data,
+            //     chatId: 0,
+            // }));
         });
 
         const presenceChannel = pusher.subscribe(PUSHER_PRESENCE_CHANNEL_NAME) as PresenceChannel;
@@ -71,7 +74,7 @@ const Messenger = () => {
         // });
 
         return { pusher, privateChannel, presenceChannel };
-    }, [dispatch, pusherConfig?.appKey, pusherConfig?.cluster, session.data?.user.id]);
+    }, [pusherConfig?.appKey, pusherConfig?.cluster, session.data?.user.id]);
 
     return (
         <>
@@ -81,6 +84,7 @@ const Messenger = () => {
             </ChatWindowHeader>
             <ChatsList />
             <ChatWindow />
+            <ReactQueryDevtools initialIsOpen={false} />
         </>
     );
 };

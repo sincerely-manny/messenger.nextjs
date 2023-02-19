@@ -1,20 +1,41 @@
 'use client';
 
+import { Message } from '@prisma/client';
 import { nanoid } from '@reduxjs/toolkit';
-import { appendMessage } from 'app/messenger/messages.slice';
 import { trpc } from 'components/withTrpcProvider';
 import { useSession } from 'next-auth/react';
 import {
     createRef, FormEvent, KeyboardEvent, useEffect, useState,
 } from 'react';
 import { FiSend } from 'react-icons/fi';
-import { useDispatch } from 'react-redux';
 import './NewMessageForm.scss';
 
 const NewMessageForm = () => {
     const session = useSession();
-    const dispatch = useDispatch();
-    const sendMessageMutation = trpc.message.send.useMutation();
+    const chatId = 'clcm46x3n0000rihrdhxpmkm1';
+    const messageListUtils = trpc.useContext().message.list;
+
+    const sendMessageMutation = trpc.message.send.useMutation({
+        onMutate: async (newMessage) => {
+            await messageListUtils.cancel();
+            // const previousMessages = queryClient.getQueryData(queryKey) as Message[];
+            // queryClient.setQueryData(queryKey, [...previousMessages, newMessage]);
+            const previousMessages = messageListUtils.getData(chatId);
+            if (Array.isArray(previousMessages)) {
+                messageListUtils.setData(
+                    chatId,
+                    [...previousMessages, newMessage],
+                );
+            }
+            return { previousMessages };
+        },
+        onError: (err, newMessage, context) => {
+            messageListUtils.setData(chatId, context?.previousMessages);
+        },
+        onSettled: async () => {
+            await messageListUtils.invalidate(chatId);
+        },
+    });
 
     const [form, setForm] = useState({
         message: '',
@@ -28,20 +49,29 @@ const NewMessageForm = () => {
             return;
         }
         const clientsideMessageId = nanoid();
-        dispatch(appendMessage({ // optimisticly sending message
+        // dispatch(appendMessage({ // optimisticly sending message
+        //     id: clientsideMessageId,
+        //     text: form.message,
+        //     senderId: session.data?.user.id || '0',
+        // }));
+        const message: Message = {
             id: clientsideMessageId,
             text: form.message,
-            senderId: session.data?.user.id || '0',
-        }));
+            sentAt: new Date(),
+            userId: session.data?.user.id || '0',
+            chatId,
+            status: 'SENT',
+        };
         setForm({
             message: '',
             disabled: true,
         });
-        sendMessageMutation.mutate({
-            id: clientsideMessageId,
-            text: form.message,
-            senderId: session.data?.user.id || '0',
-        });
+        sendMessageMutation.mutate(message);
+        // sendMessageMutation.mutate({
+        //     id: clientsideMessageId,
+        //     text: form.message,
+        //     senderId: session.data?.user.id || '0',
+        // });
     };
 
     // binding ctrl+enter to send
